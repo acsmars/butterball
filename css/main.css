@@ -14,3 +14,57 @@
 .darkBrown {
 	background-color: #402E27;
 } 
+body {
+	background-color: #F2DEA0;
+}
+
+content {
+	display:block;
+    margin:0px auto 0px;
+    border:2px solid #8C6542;
+    width: 980px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    min-height:600px;
+    
+
+}
+#tabs {
+	display:block;
+	border-bottom:2px solid #8C6542;
+	padding-left: 10px;
+	padding-right: 10px;
+	height:24px;
+}
+#tabs > div {
+	display:inline;
+}
+#tabs > div > a {
+	padding:8px;
+	text-decoration: none;
+	color: black;
+	background-color:#8C6542;
+}
+#tabs > div > a:hover {
+	background-color:#F2E749;
+}
+#tabs > div > a.selected {
+	background-color:#D9AB80;
+}
+
+#tab1 {
+
+}
+#tab2 {
+
+}
+#tab3 {
+
+}
+div.tabContent.hide { display: none; }
+
+p {text-indent:10px;margin:10px;font-size:16px;}
+h1 {text-indent:0;margin:10px;font-size:32px;font-weight: normal;}
+h2 {text-indent:0;margin:10px;font-size:24px;font-weight: normal;}
+h3 {text-indent:0;margin:10px;font-size:20px;font-weight: normal;}
+
+.border {margin: 7px;border: 2px solid #8C6542;padding: 0;}
