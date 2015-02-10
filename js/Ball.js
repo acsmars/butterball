@@ -3,6 +3,7 @@
  */
 function ball (color, x, y, r) {
 	
+	this.type = "ball";
 	this.color = typeof color !== 'undefined' ? color: "white";
 	this.x = typeof x !== 'undefined' ? x : 0;
 	this.y = typeof y !== 'undefined' ? y : 0;
