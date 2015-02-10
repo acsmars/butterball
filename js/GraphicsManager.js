@@ -41,10 +41,9 @@ var GraphicsManager = function (canvas_container, width, height) {
         // clear the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
+        console.log(objects);
         for (var obj in objects) {
-            // determine object type
-            // draw object
-            // profit
+            drawRectangle(walls[obj].x, walls[obj].y, walls[obj].width, walls[obj].height);
         }
     };
 
