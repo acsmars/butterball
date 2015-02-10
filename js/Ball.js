@@ -1,9 +1,10 @@
 /**
  * Ball class acts a generic "ball" object.
  */
-function ball () {
-	this.color = null;
-	this.x = null;
-	this.y = null;
-	this.r = null;
+function ball (color, x, y, r) {
+	
+	this.color = typeof color !== 'undefined' ? color: "white";
+	this.x = typeof x !== 'undefined' ? x : 0;
+	this.y = typeof y !== 'undefined' ? y : 0;
+	this.r = typeof r !== 'undefined' ? r : 0;
 }
