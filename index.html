@@ -10,21 +10,7 @@
 </body>
 <script type="text/javascript">
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerWidth, window.innerHeight);
-    var walls = [new wall(), new wall(), new wall()];
-    walls[0].setX(10);
-    walls[0].setY(10);
-    walls[0].setWidth(10);
-    walls[0].setHeight(10);
-
-    walls[1].setX(30);
-    walls[1].setY(30);
-    walls[1].setWidth(15);
-    walls[1].setHeight(15);
-
-    walls[2].setX(50);
-    walls[2].setY(50);
-    walls[2].setWidth(40);
-    walls[2].setHeight(40);
-    gfx.draw(walls);
+    var objs = [new wall(10, 10, 10, 10), new wall(30, 30, 15, 15), new wall(50, 50, 40, 40), new ball('#00FF00', 300, 300, 10)];
+    gfx.draw(objs);
 </script>
 </html>

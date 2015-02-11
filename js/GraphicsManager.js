@@ -37,14 +37,23 @@ var GraphicsManager = function (canvas_container, width, height) {
      * Draw objects to the screen
      * @param  {Array} objects The object to draw on the screen
      */
-    this.draw = function (objects) {
+    this.draw = function (objects, score) {
+        // set default values
+        score = typeof score !== 'undefined' ? score : 0;
+
         // clear the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        console.log(objects);
-        for (var obj in objects) {
-            drawRectangle(walls[obj].x, walls[obj].y, walls[obj].width, walls[obj].height);
+        for (var i in objects) {
+            if (objects[i].type == "wall") {
+                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, 'black');
+            } else if (objects[i].type == "ball") {
+                drawCircle(objects[i].x, objects[i].y, objects[i].color, objects[i].r);
+            } else if (objects[i].type == "paddle") {
+                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, 'red');
+            }
         }
+
     };
 
     /**
