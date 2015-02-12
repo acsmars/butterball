@@ -93,7 +93,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                 newObjects[index].x += 2 * (objects[index].r + abs(objects[index2].x + objects[index2].width - objects[index].x));
                             }
                             else {
-                                newObjects[index].x += 2 * (objects[index].r + abs(objects[index2].x - objects[index].x));
+                                newObjects[index].x += -2 * (objects[index].r + abs(objects[index2].x - objects[index].x));
                             }
                             if (d > 1) {
                                 dlog("Moved Ball object " String(index) + " along X axis by " String(newObjects[index].x - objects[index].x) + " units" );
@@ -108,7 +108,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                 newObjects[index].y += 2 * (objects[index].r + abs(objects[index2].y + objects[index2].height - objects[index].y));
                             }
                             else {
-                                newObjects[index].y += 2 * (objects[index].r + abs(objects[index2].y - objects[index].y));
+                                newObjects[index].y += -2 * (objects[index].r + abs(objects[index2].y - objects[index].y));
                             }s[index].y));
                             if (d > 1) {
                                 dlog("Moved Ball object " String(index) + " along Y axis by " String(newObjects[index].y - objects[index].y) + " units" );
