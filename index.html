@@ -15,6 +15,7 @@
     var objs = [new wall(300, 300, 50, 50), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
     var scores = [0, 0, 0]
     gfx.draw(objs, scores);
+    var dir = 2;
 
     window.setInterval(function() {
         scores[0] += 1;
@@ -30,5 +31,15 @@
         scores[2] += 1;
         gfx.draw(objs, scores);
     }, 23421);
+
+    window.setInterval(function() {
+        objs[2].x += dir;
+        objs[1].y += dir/2;
+        gfx.draw(objs, scores);
+    }, 10);
+
+    window.setInterval(function() {
+        dir = -dir;
+    }, 1250);
 </script>
 </html>
