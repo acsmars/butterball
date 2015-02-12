@@ -8,7 +8,7 @@ function paddle (x, y, width, height) {
 	this.y = typeof y !== 'undefined' ? y : 0;
 	this.width = typeof width !== 'undefined' ? width : 0;
 	this.height = typeof height !== 'undefined' ? height : 0;
-	this.xVelocity = 0;
-	this.yvelocity = 0;
+	this.vx = 0;
+	this.vy = 0;
 }
 
