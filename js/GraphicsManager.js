@@ -8,6 +8,10 @@ var GraphicsManager = function (canvas_container, width, height) {
     var wall_color = null;
     var ball_color = null;
 
+    this.border_width = 30;
+    this.border_color = 'black';
+    this.score_color = 'white';
+
     /**
      * Initialize HTML5 canvas
      * @param  {div} canvas_container Div container for the HTML5 canvas
@@ -36,6 +40,7 @@ var GraphicsManager = function (canvas_container, width, height) {
     /**
      * Draw objects to the screen
      * @param  {Array} objects The object to draw on the screen
+     * @param {Array} score An array of score for the current game with team 1's score first, and so on
      */
     this.draw = function (objects, score) {
         // set default values
@@ -44,6 +49,11 @@ var GraphicsManager = function (canvas_container, width, height) {
         // clear the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
+        // draw the border and score
+        this.drawBorder();
+        this.drawScore(score);
+
+        // draw all game objects
         for (var i in objects) {
             if (objects[i].type == "wall") {
                 drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, 'black');
@@ -79,6 +89,30 @@ var GraphicsManager = function (canvas_container, width, height) {
     }
 
     /**
+     * Draw the border of the playing field to the screen
+     */
+    this.drawBorder = function () {
+        drawRectangle(0, 0, context.canvas.width, this.border_width, this.border_color);                                            // top
+        drawRectangle(0, context.canvas.height-this.border_width, context.canvas.width, this.border_width, this.border_color);      // bottom
+        drawRectangle(0, 0, this.border_width, context.canvas.height, this.border_color);                                           // left
+        drawRectangle(context.canvas.width-this.border_width, 0, this.border_width, context.canvas.height, this.border_color);      // right
+    };
+
+    /**
+     * Draw the score over the border of the playing field
+     */
+    this.drawScore = function (score) {
+        context.fillStyle = this.score_color;
+        context.font = "bold " + this.border_width*0.75 + "px Arial";
+        context.textAlign = 'left';
+        context.textBaseline = 'middle';
+
+        for (var i =0; i<score.length; i++) {
+            context.fillText("Team " + (i + 1) + ": " + score[i], this.border_width*1.1 + this.border_width*(5*i), this.border_width/2);
+        }
+    };
+
+    /**
      * Draw a rectangle to the canvas
      * @param  {float} x      The x coordinate of the top left corner of the rectangle
      * @param  {float} y      The y coordinate of the top left corner of the rectangle
@@ -97,5 +131,6 @@ var GraphicsManager = function (canvas_container, width, height) {
         context.fillRect(x, y, width, height);
     }
 
+    // initialize the oject
     init(canvas_container, width, height);
 };

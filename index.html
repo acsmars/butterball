@@ -5,13 +5,30 @@
     <script type="text/javascript" src="js/Ball.js"></script>
     <script type="text/javascript" src="js/Wall.js"></script>
     <script type="text/javascript" src="js/Paddle.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
 </head>
 <body>
     <div id="canvas_container"></div>
 </body>
 <script type="text/javascript">
-    var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerWidth, window.innerHeight);
-    var objs = [new wall(10, 10, 10, 10), new wall(30, 30, 15, 15), new wall(50, 50, 40, 40), new ball('#00FF00', 300, 300, 10), new paddle(10,100,10,100)];
-    gfx.draw(objs);
+    var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerHeight, window.innerHeight);
+    var objs = [new wall(300, 300, 50, 50), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
+    var scores = [0, 0, 0]
+    gfx.draw(objs, scores);
+
+    window.setInterval(function() {
+        scores[0] += 1;
+        gfx.draw(objs, scores);
+    }, 1000);
+
+    window.setInterval(function() {
+        scores[1] += 1;
+        gfx.draw(objs, scores);
+    }, 2400);
+
+    window.setInterval(function() {
+        scores[2] += 1;
+        gfx.draw(objs, scores);
+    }, 23421);
 </script>
 </html>
