@@ -1,5 +1,5 @@
 /*
- * Wall class acts as a generic "wall" object.
+ * Paddle class acts as a generic "wall" object.
  */
 function paddle (x, y, width, height) {
 	
