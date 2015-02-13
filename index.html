@@ -2,6 +2,7 @@
 <html>
 <head>
     <script type="text/javascript" src="js/GraphicsManager.js"></script>
+    <script type="text/javascript" src="js/SimplePhysicsEngine.js"></script>
     <script type="text/javascript" src="js/Ball.js"></script>
     <script type="text/javascript" src="js/Wall.js"></script>
     <script type="text/javascript" src="js/Paddle.js"></script>
@@ -12,10 +13,18 @@
 </body>
 <script type="text/javascript">
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerHeight, window.innerHeight);
-    var objs = [new wall(300, 300, 50, 50), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
+    var phs = new SimplePhysicsEngine(window.innerHeight, window.innerHeight, 0);
+    var objs = [new wall(100, 100, 300, 20), new wall(100, 100, 20, 300), new wall(100, 380, 300, 20), new wall(380, 100, 20, 300), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
     var scores = [0, 0, 0]
     gfx.draw(objs, scores);
     var dir = 2;
+    
+    objs[4].vx = 5;
+    objs[4].vy = 6;
+    objs[0].direction = "h";
+    objs[1].direction = "v";
+    objs[2].direction = "h";
+    objs[3].direction = "v";
 
     window.setInterval(function() {
         scores[0] += 1;
@@ -33,8 +42,7 @@
     }, 23421);
 
     window.setInterval(function() {
-        objs[2].x += dir;
-        objs[1].y += dir/2;
+        phs.step(objs, 1);
         gfx.draw(objs, scores);
     }, 10);
 
