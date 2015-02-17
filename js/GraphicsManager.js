@@ -1,9 +1,13 @@
 /**
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
-var GraphicsManager = function (canvas_container, width, height) {
+var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height) {
     var canvas = null;
     var context = null;
+
+    // the width and height of the actual playing field
+    var pw = null;
+    var ph = null;
 
     var wall_color = null;
     var ball_color = null;
@@ -15,7 +19,7 @@ var GraphicsManager = function (canvas_container, width, height) {
     var default_paddle_color = "#8C6542"; // brown
     var default_text_color = "#D9AB80"; // tan
 
-    this.border_width = 30;
+    var border_width = 30;
     this.border_color = default_border_color;
     this.score_color = default_text_color;
 
@@ -25,10 +29,12 @@ var GraphicsManager = function (canvas_container, width, height) {
      * @param  {int} width            The width of the canvas. Defaults to 500.
      * @param  {int} height           The height of the canvas. Defaults to 500.
      */
-    function init(canvas_container, width, height) {
+    function init(canvas_container, width, height, phys_width, phys_height) {
         // set default values
         width = typeof width !== 'undefined' ? width : 1000;
         height = typeof height !== 'undefined' ? height : 1000;
+        pw = typeof phys_width !== 'undefined' ? phys_width : width;
+        ph = typeof phys_height !== 'undefined' ? phys_height : height;
 
         // create the canvas
         canvas = document.createElement('canvas');
@@ -84,6 +90,11 @@ var GraphicsManager = function (canvas_container, width, height) {
         color = color !== null ? color : default_ball_color;
         radius = typeof radius !== 'undefined' ? radius : 3.0;
 
+        // scale the objects to pixels
+        x = scaleX(x);
+        y = scaleY(y);
+        radius = (scaleX(radius) + scaleY(radius))/2;
+
         // create the circle
         context.beginPath();
         context.arc(x, y, radius, 0, 2*Math.PI);
@@ -98,10 +109,10 @@ var GraphicsManager = function (canvas_container, width, height) {
      * Draw the border of the playing field to the screen
      */
     this.drawBorder = function () {
-        drawRectangle(0, 0, context.canvas.width, this.border_width, this.border_color);                                            // top
-        drawRectangle(0, context.canvas.height-this.border_width, context.canvas.width, this.border_width, this.border_color);      // bottom
-        drawRectangle(0, 0, this.border_width, context.canvas.height, this.border_color);                                           // left
-        drawRectangle(context.canvas.width-this.border_width, 0, this.border_width, context.canvas.height, this.border_color);      // right
+        drawRectangle(0, 0, context.canvas.width, scaleY(border_width), this.border_color);                                            // top
+        drawRectangle(0, context.canvas.height-scaleY(border_width), context.canvas.width, scaleY(border_width), this.border_color);      // bottom
+        drawRectangle(0, 0, scaleX(border_width), context.canvas.height, this.border_color);                                           // left
+        drawRectangle(context.canvas.width-scaleX(border_width), 0, scaleX(border_width), context.canvas.height, this.border_color);      // right
     };
 
     /**
@@ -109,12 +120,12 @@ var GraphicsManager = function (canvas_container, width, height) {
      */
     this.drawScore = function (score) {
         context.fillStyle = this.score_color;
-        context.font = "bold " + this.border_width*0.75 + "px Arial";
+        context.font = "bold " + border_width*0.75 + "px Arial";
         context.textAlign = 'left';
         context.textBaseline = 'middle';
 
         for (var i =0; i<score.length; i++) {
-            context.fillText("Team " + (i + 1) + ": " + score[i], this.border_width*1.1 + this.border_width*(5*i), this.border_width/2);
+            context.fillText("Team " + (i + 1) + ": " + score[i], border_width*1.1 + border_width*(5*i), border_width/2);
         }
     };
 
@@ -130,6 +141,12 @@ var GraphicsManager = function (canvas_container, width, height) {
         // set default values
         color = typeof color !== 'undefined' ? color : default_wall_color;
 
+        // scale the real coordinates to pixel coordinates
+        x = scaleX(x);
+        y = scaleY(y);
+        width = scaleX(width);
+        height = scaleY(height);
+
         // set the rectangle's color
         context.fillStyle = color;
 
@@ -137,6 +154,20 @@ var GraphicsManager = function (canvas_container, width, height) {
         context.fillRect(x, y, width, height);
     }
 
+    // scale an actual x position to a graphical x position
+    function scaleX(x) {
+        return context.canvas.width*(x/pw);
+    }
+
+    // scale an actual y position to a graphical y position
+    function scaleY(y) {
+        return context.canvas.height*(y/ph);
+    }
+
+    this.setBorderWidth = function (w) {
+        border_width = w;
+    };
+
     // initialize the oject
-    init(canvas_container, width, height);
+    init(canvas_container, width, height, phys_width, phys_height);
 };
