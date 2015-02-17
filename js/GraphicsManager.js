@@ -8,9 +8,16 @@ var GraphicsManager = function (canvas_container, width, height) {
     var wall_color = null;
     var ball_color = null;
 
+    var default_border_color = "#402E27"; // dark brown
+    var default_background_color = "#F2DEA0"; // wheat
+    var default_ball_color = "#8C6542"; // brown
+    var default_wall_color = "#8C6542"; // brown
+    var default_paddle_color = "#8C6542"; // brown
+    var default_text_color = "#D9AB80"; // tan
+
     this.border_width = 30;
-    this.border_color = 'black';
-    this.score_color = 'white';
+    this.border_color = default_border_color;
+    this.score_color = default_text_color;
 
     /**
      * Initialize HTML5 canvas
@@ -43,11 +50,11 @@ var GraphicsManager = function (canvas_container, width, height) {
      * @param {Array} score An array of score for the current game with team 1's score first, and so on
      */
     this.draw = function (objects, score) {
-        // set default values
-        score = typeof score !== 'undefined' ? score : 0;
-
         // clear the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // fill the background
+        drawRectangle(0, 0, canvas.width, canvas.height, default_background_color);
 
         // draw the border and score
         this.drawBorder();
@@ -56,14 +63,13 @@ var GraphicsManager = function (canvas_container, width, height) {
         // draw all game objects
         for (var i in objects) {
             if (objects[i].type == "wall") {
-                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, 'black');
+                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, default_wall_color);
             } else if (objects[i].type == "ball") {
-                drawCircle(objects[i].x, objects[i].y, objects[i].color, objects[i].r);
+                drawCircle(objects[i].x, objects[i].y, objects[i].r, objects[i].color);
             } else if (objects[i].type == "paddle") {
-                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, 'red');
+                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, default_paddle_color);
             }
         }
-
     };
 
     /**
@@ -73,9 +79,9 @@ var GraphicsManager = function (canvas_container, width, height) {
      * @param  {color} color  The color of the circle. Defaults to the default ball color.
      * @param  {float} radius The radius of the circle. Defaults to 3.0
      */
-    function drawCircle(x, y, color, radius) {
+    function drawCircle(x, y, radius, color) {
         // set default values
-        color = typeof color !== 'undefined' ? color : 'green';
+        color = color !== null ? color : default_ball_color;
         radius = typeof radius !== 'undefined' ? radius : 3.0;
 
         // create the circle
@@ -122,7 +128,7 @@ var GraphicsManager = function (canvas_container, width, height) {
      */
     function drawRectangle(x, y, width, height, color) {
         // set default values
-        color = typeof color !== 'undefined' ? color : 'green';
+        color = typeof color !== 'undefined' ? color : default_wall_color;
 
         // set the rectangle's color
         context.fillStyle = color;
