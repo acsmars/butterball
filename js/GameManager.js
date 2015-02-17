@@ -17,6 +17,9 @@
 	// graphics manager from index.html
 	var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerHeight, window.innerHeight);
 	
+	//controller from index.html
+	var con = new Controller(document.getElementById("canvas_container"));
+
 	// The first player will be player number 0 for code purposes
 	var scores = [0, 0, 0]
 	
