@@ -14,9 +14,6 @@
 	// physics engine
 	var phs = new SimplePhysicsEngine(window.innerHeight, window.innerHeight, 0);
 
-	//controller from index.html
-	var con = new Controller(document.getElementById("canvas_container"));
-
 	// some test objects - these are the same ones that are in index.html
     var objs = [new wall(100, 100, 300, 20), new wall(100, 100, 20, 300), new wall(100, 380, 300, 20), new wall(380, 100, 20, 300), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
 	
