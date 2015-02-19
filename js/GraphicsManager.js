@@ -2,6 +2,7 @@
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
 var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height) {
+    // html5 canvas objects
     var canvas = null;
     var context = null;
 
@@ -9,9 +10,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
     var pw = null;
     var ph = null;
 
-    var wall_color = null;
-    var ball_color = null;
-
+    // default colors
     var default_border_color = "#402E27"; // dark brown
     var default_background_color = "#F2DEA0"; // wheat
     var default_ball_color = "#8C6542"; // brown
@@ -19,6 +18,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
     var default_paddle_color = "#8C6542"; // brown
     var default_text_color = "#D9AB80"; // tan
 
+    // border and scoring information
     var border_width = 30;
     this.border_color = default_border_color;
     this.score_color = default_text_color;
@@ -154,19 +154,52 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         context.fillRect(x, y, width, height);
     }
 
-    // scale an actual x position to a graphical x position
+    /**
+     * scale an actual x position to a graphical y position
+     * @param  {float} x The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
     function scaleX(x) {
         return context.canvas.width*(x/pw);
     }
 
-    // scale an actual y position to a graphical y position
+    /**
+     * scale an actual y position to a graphical y position
+     * @param  {float} y The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
     function scaleY(y) {
         return context.canvas.height*(y/ph);
     }
 
+    /**
+     * Set the border width of the playing field
+     * @param {int} w The new width
+     */
     this.setBorderWidth = function (w) {
         border_width = w;
     };
+
+    /**
+     * Rotate the playing field so that the player always sees his/her goal
+     * at the bottom of the screen
+     * @param  {char} player_position The position of the player. t = top, b = bot, u = up, d = down
+     */
+    function rotateDown(player_position) {
+        switch (player_position) {
+            case 'd':
+                return;
+            case 'u':
+                context.rotate(Math.PI);
+                return;
+            case 'l':
+                context.rotate(Math.PI * 1.5);
+                return;
+            case 'r':
+                context.rotate(Math.PI * 0.5);
+                return;
+        }
+    }
 
     // initialize the oject
     init(canvas_container, width, height, phys_width, phys_height);
