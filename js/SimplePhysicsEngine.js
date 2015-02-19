@@ -8,7 +8,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
     // (Number of points to check around perimiter when colliding)
     // May need to be adjusted depending on load
     // Reccomend multiples of 8
-    var ballRadSteps = 16;
+    var ballRadSteps = 32;
     
     function init(pxWidth, pxHeight, debug) {
         // set default values
@@ -175,27 +175,9 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                     newObjects[index].vx = objects[index].vx - 2 * (objects[index].vx * Math.cos(angle)) * Math.cos(angle);
                                     newObjects[index].vy = objects[index].vy - 2 * (objects[index].vy * Math.sin(angle)) * Math.sin(angle);
                                     
-                                    // Move to true X and Y position from guessed position
-                                    // See physics calculation document for example diagrams
-                                    if (Math.sign(objects[index].vx) == -1) {
-                                        newObjects[index].x += 1 * (objects[index].r + Math.abs(objects[index2].x + objects[index2].width - objects[index].x));
-                                    }
-                                    else {
-                                        newObjects[index].x += -1 * (objects[index].r + Math.abs(objects[index2].x - objects[index].x));
-                                    }
-                                    
-                                    if (Math.sign(objects[index].vy) == -1) {
-                                        newObjects[index].y += 1 * (objects[index].r + Math.abs(objects[index2].y + objects[index2].height - objects[index].y));
-                                    }
-                                    else {
-                                        newObjects[index].y += -1 * (objects[index].r + Math.abs(objects[index2].y - objects[index].y));
-                                    }
-                                    
-                                    if (debug > 1) {
-                                        this.dlog("Moved Ball object " + String(index) + " along X axis by " + String(newObjects[index].x - objects[index].x) + " units", "SimplePhysicsEngine");
-                                        this.dlog("Moved Ball object " + String(index) + " along Y axis by " + String(newObjects[index].y - objects[index].y) + " units", "SimplePhysicsEngine");
-                                        
-                                    }
+                                    // Move ball out of collision range
+                                    newObjects[index].x += newObjects[index].vx * time;
+                                    newObjects[index].y += newObjects[index].vy * time;
                                 }
                             break;
                             

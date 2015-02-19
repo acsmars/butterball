@@ -14,15 +14,15 @@
 </body>
 <script type="text/javascript">
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), window.innerHeight, window.innerHeight);
-    var phs = new SimplePhysicsEngine(window.innerHeight, window.innerHeight, 3);
+    var phs = new SimplePhysicsEngine(window.innerHeight, window.innerHeight, 0);
     var con = new Controller(document.getElementById("canvas_container"));
-    var objs = [new wall(100, 100, 300, 20, "h"), new wall(100, 100, 20, 300, "v"), new wall(100, 380, 300, 20, "h"), new wall(380, 100, 20, 300, "v"), new ball('green', 200, 200, 10), new paddle(200, 400, 70, 10)];
+    var objs = [new wall(100, 100, 300, 20), new wall(100, 100, 20, 300), new wall(100, 380, 300, 20), new wall(380, 100, 20, 300), new ball('green', 150, 150, 10), new paddle(200, 300, 70, 10)];
     var scores = [0, 0, 0]
     gfx.draw(objs, scores);
     var dir = 2;
     
     objs[4].vx = 1;
-    objs[4].vy = 2;
+    objs[4].vy = 1;
 
     window.setInterval(function() {
         scores[0] += 1;
