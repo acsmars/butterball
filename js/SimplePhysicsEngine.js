@@ -7,7 +7,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
     // Determines number of degrees of accuracy when colliding ball
     // (Number of points to check around perimiter when colliding)
     // May need to be adjusted depending on load
-    // Reccomend multiples of 8
+    // Reccomend 8
     var ballRadSteps = 8;
     
     function init(pxWidth, pxHeight, debug) {
@@ -104,7 +104,6 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
      */
     this.step = function (objects, time) {
         // Iterate through objects and determine future positions
-        // TODO: For now, this will only handle ball/wall collisions (i.e. simple reflections only)
         // will need to be improved for odd shapes/momentums in future
         var index, len;
         if (debug > 0) {
