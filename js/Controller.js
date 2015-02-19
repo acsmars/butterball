@@ -12,26 +12,22 @@ var Controller = function (canvas_container) {
 	function checkKey(e) {
 		//Finds a paddle object and applies adjustments from input keys to its position
 		//Later versions will have settings for which paddle is bound to which keys
-		for (var i in objs) {
-            if (objs[i].type == "paddle") {
-        		var paddle = objs[i];        
-            }
-        }
-
+		console.log("Check");
+		
 	    if (keys[38]) {
-	        paddle.y = paddle.y - 1;
+	        paddle.y = paddle.vy - 1;
 	    }
 	    if (keys[40]) {
-	        paddle.y = paddle.y + 1;
+	        paddle.y = paddle.vy + 1;
 	    }
 	    if (keys[37]) {
-	       paddle.x = paddle.x - 1;
+	       paddle.x = paddle.vx - 1;
 	    }
 	    if (keys[39]) {
-	       paddle.x = paddle.x + 1;
+	       paddle.x = paddle.vx + 1;
     	}
 	}
 	//Presently invoked once per millisecond, should be invoked by physics engine later
 	//It is important that the physics engine control the controller updates so taht paddles move with the same lag as the ball
-	var paddleControlUpdateInterval = setInterval(function () {checkKey()},1);
+	var paddleControlUpdateInterval = setInterval(function () {checkKey()},10);
 };
