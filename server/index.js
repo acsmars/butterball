@@ -22,9 +22,13 @@ io.on('connection', function(socket) {
 	    console.log(msg);
 	      });
 
+	socket.on('push msg', function(msg){
+		io.emit('push msg', msg + socket.request.connection._peername.address);
+		});
+
 });
 
 //Listen for connections and request on port 8080
 http.listen(8080, function(){
-	  console.log('listening on *:8080');
+	  console.log('Listening on *:8080');
 });

@@ -6,11 +6,18 @@
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="/tickService.js"></script>
 
+<style>
+#leftPanel{float: left; width: 49%}
+#rightPanel{float: right; width: 49%}
+</style>
+
 <title>Butter Ball</title>
 </head>
 
 <body>
 <h1>Butter Ball</h1>
-<ul id="debug"></ul>
+<div><button id="push">Push</button></div>
+<div id="leftPanel"><h2>Connection Log: </h2><ul id="connectionLog"></ul></div>
+<div id="rightPanel"><h2>Push Log: </h2><ul id="pushLog"></ul></div>
 </body>
 </html>
