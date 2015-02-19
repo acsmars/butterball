@@ -8,6 +8,7 @@ function wall (x, y, width, height) {
 	this.y = typeof y !== 'undefined' ? y : 0;
 	this.width = typeof width !== 'undefined' ? width : 0;
 	this.height = typeof height !== 'undefined' ? height : 0;
-	this.direction = "v";
+	this.owner = typeof owner !== 'undefined' ? owner : null;
+	//this.direction = typeof direction !== 'undefined' ? direction : "v";
 }
 
