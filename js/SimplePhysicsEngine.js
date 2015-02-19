@@ -8,7 +8,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
     // (Number of points to check around perimiter when colliding)
     // May need to be adjusted depending on load
     // Reccomend multiples of 8
-    var ballRadSteps = 32;
+    var ballRadSteps = 8;
     
     function init(pxWidth, pxHeight, debug) {
         // set default values
@@ -159,8 +159,8 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                         // Check type of object
                         switch (objects[index2].type) {
                         
-                            case "wall":
                             case "paddle":
+                            case "wall":
                                 // Check if ball inside wall bounds
                                 if (radiusCheckCollision(radiusPoints, objects[index2])) {
                                 
@@ -171,9 +171,12 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                     // Determine angle of incidence
                                     var angle = findAngleOfIncidence(radiusPoints);
                                     
+                                    //Find dot product of velocity and n (normal vector to angle of incidence
+                                    var dotProduct = objects[index].vx * Math.cos(angle) + objects[index].vy * Math.sin(angle);
+                                    
                                     // Determine new velocities
-                                    newObjects[index].vx = objects[index].vx - 2 * (objects[index].vx * Math.cos(angle)) * Math.cos(angle);
-                                    newObjects[index].vy = objects[index].vy - 2 * (objects[index].vy * Math.sin(angle)) * Math.sin(angle);
+                                    newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle);
+                                    newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
                                     
                                     // Move ball out of collision range
                                     newObjects[index].x += newObjects[index].vx * time;
@@ -183,7 +186,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                             
                             default:
                                 if (debug > 0) {
-                                    this.dlog("Ignoring static object " + String(index2), "SimplePhysicsEngine");
+                                    this.dlog("Ignoring non-collision object " + String(index2), "SimplePhysicsEngine");
                                 }
                                 break;
                         }
