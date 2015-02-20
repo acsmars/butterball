@@ -8,7 +8,7 @@ var SimplePhysicsEngine = function (managerObject, debug) {
     // (Number of points to check around perimiter when colliding)
     // May need to be adjusted depending on load
     // Reccomend 8
-    var ballRadSteps = 8;
+    var ballRadSteps = 16;
     
     //TODO: replace gameManager instance with message handler?
     function init(managerObject, debug) {
@@ -74,35 +74,35 @@ var SimplePhysicsEngine = function (managerObject, debug) {
             }
         }
         
-        // Check if even number of collisions
-        var isEven = (collideAngles.length % 2 == 0);
+        //Found sample for computing average angle at: http://rosettacode.org/wiki/Averages/Mean_angle#Java
         
-        var center = Math.floor(collideAngles.length / 2);
+        var x_component = 0.0;
+        var y_component = 0.0;
+        var avg_r;
+ 
+        for (var i = 0; i < collideAngles.length; i++) {
+          x_component += Math.cos(collideAngles[i]);
+          y_component += Math.sin(collideAngles[i]);
+        }
+        x_component /= collideAngles.length;
+        y_component /= collideAngles.length;
+        avg_r = Math.atan2(y_component, x_component);
         
-        if(isEven) {
-            //Find angle of points around center
-            if (debug > 1) {
-                this.dlog("Final collision angle: " + (collideAngles[center - 1] + collideAngles[center]) / 2, "SimplePhysicsEngine")
-            }
-            return (collideAngles[center - 1] + collideAngles[center]) / 2;
+        if (debug > 1) {
+            this.dlog("Final collision angle: " + avg_r, "SimplePhysicsEngine")
         }
-        else {
-            if (debug > 1) {
-                this.dlog("Final collision angle: " + collideAngles[center], "SimplePhysicsEngine")
-            }
-            return collideAngles[center];
-        }
+        
+        return avg_r;
+        
      }.bind(this);
      
-     var makeRadiusPoints = function(ball, ballRadSteps) {
-        var radiusPoints = [];
+     var makeRadiusPoints = function(ball, ballRadSteps, radiusPoints) {
         for (var i = 0; i < ballRadSteps; i++) {
-            radiusPoints[i*4] = ball.x + (ball.r - .1) * Math.cos(2*Math.PI * i/ballRadSteps);
-            radiusPoints[i*4 + 1] = ball.y + (ball.r - .1) * Math.sin(2*Math.PI * i/ballRadSteps);
+            radiusPoints[i*4] = ball.x + (ball.r) * Math.cos(2*Math.PI * i/ballRadSteps);
+            radiusPoints[i*4 + 1] = ball.y + (ball.r) * Math.sin(2*Math.PI * i/ballRadSteps);
             radiusPoints[i*4 + 2] = false;
             radiusPoints[i*4 + 3] = 2*Math.PI * i/ballRadSteps;
         }
-        return radiusPoints;
      }.bind(this);
 
     /**
@@ -153,7 +153,8 @@ var SimplePhysicsEngine = function (managerObject, debug) {
                         }
                         
                         // Determine each point around the radius of the circle
-                        var radiusPoints = makeRadiusPoints(objects[index], ballRadSteps);
+                        var radiusPoints = [];
+                        makeRadiusPoints(objects[index], ballRadSteps, radiusPoints);
                         
                         // Check type of object
                         switch (objects[index2].type) {
@@ -179,11 +180,11 @@ var SimplePhysicsEngine = function (managerObject, debug) {
                                     newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
                                     
                                     // Move ball until collision is no longer happening
-                                    radiusPoints = makeRadiusPoints(newObjects[index], ballRadSteps);
+                                    makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
                                     while (radiusCheckCollision(radiusPoints, objects[index2])) {
                                         newObjects[index].x += newObjects[index].vx * time;
                                         newObjects[index].y += newObjects[index].vy * time;
-                                        radiusPoints = makeRadiusPoints(newObjects[index], ballRadSteps);
+                                        makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
                                     }
                                 }
                             break;
