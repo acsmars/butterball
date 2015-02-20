@@ -18,15 +18,18 @@ var Controller = function (paddle) {
 	function checkKey(e) {
 		//Finds a paddle object and applies adjustments from input keys to its position
 		//Later versions will have settings for which paddle is bound to which keys
+		console.log("Paddle| vx:" + paddle.vx + " | vy:"+ paddle.vy);
 
-	    if (keys[up]) paddle.vy = -1;
+		if (keys[up] && keys[down]) paddle.vy = 0;
+	    else if (keys[up]) paddle.vy = -1;
+	    else if (keys[down]) paddle.vy = 1;
 	    else paddle.vy = 0;
-	    if (keys[down]) paddle.vy = 1;
-	    else paddle.vy = 0;
-	    if (keys[left]) paddle.vx = -1;
+	    
+	    if (keys[left] && keys[right]) paddle.vx = 0;
+	    else if (keys[left]) paddle.vx = -1;
+	    else if (keys[right]) paddle.vx = 1;
 	    else paddle.vx = 0;
-	    if (keys[right]) paddle.vx = 1;
-	    else paddle.vx = 0;
+
 	}
 	//Presently invoked once per millisecond, should be invoked by physics engine later
 	//It is important that the physics engine control the controller updates so taht paddles move with the same lag as the ball
