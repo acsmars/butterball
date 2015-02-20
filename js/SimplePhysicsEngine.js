@@ -2,7 +2,7 @@
  * SimplePhysicsEngine creates, initializes, and manages a non-raycast enabled
  * physics engine for ButterBall.
  */
-var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
+var SimplePhysicsEngine = function (managerObject, debug) {
     
     // Determines number of degrees of accuracy when colliding ball
     // (Number of points to check around perimiter when colliding)
@@ -10,11 +10,8 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
     // Reccomend 8
     var ballRadSteps = 8;
     
-    function init(pxWidth, pxHeight, debug) {
-        // set default values
-        // pxWidth and pxHeight currently do nothing; waiting to implement scaling functionality.
-        pxWidth = (typeof pxWidth == 'number' ? pxWidth : 1000);
-        phHeight = (typeof pxHeight == 'number' ? pxHeight : 1000);
+    //TODO: replace gameManager instance with message handler?
+    function init(managerObject, debug) {
         debug = (typeof debug == 'number' ? debug : 0);
     }
     
@@ -96,6 +93,17 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
             return collideAngles[center];
         }
      }.bind(this);
+     
+     var makeRadiusPoints = function(ball, ballRadSteps) {
+        var radiusPoints = [];
+        for (var i = 0; i < ballRadSteps; i++) {
+            radiusPoints[i*4] = ball.x + (ball.r - .1) * Math.cos(2*Math.PI * i/ballRadSteps);
+            radiusPoints[i*4 + 1] = ball.y + (ball.r - .1) * Math.sin(2*Math.PI * i/ballRadSteps);
+            radiusPoints[i*4 + 2] = false;
+            radiusPoints[i*4 + 3] = 2*Math.PI * i/ballRadSteps;
+        }
+        return radiusPoints;
+     }.bind(this);
 
     /**
      * Step all pasted objects by 'time' physics ticks
@@ -112,6 +120,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
         
         for (index = 0, len = objects.length; index < len; ++index) {
             // Determine new positions
+            // Done here so that new positions are copied to second array
             if (objects[index].type == "ball") {
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
@@ -143,17 +152,8 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                             continue;
                         }
                         
-                        // Create array for holding perimiter points/collisions
-                        // Format (float x, float y, bool collision), ...
-                        radiusPoints = [];
-                        
                         // Determine each point around the radius of the circle
-                        for (var i = 0; i < ballRadSteps; i++) {
-                            radiusPoints[i*4] = objects[index].x + objects[index].r * Math.cos(2*Math.PI * i/ballRadSteps);
-                            radiusPoints[i*4 + 1] = objects[index].y + objects[index].r * Math.sin(2*Math.PI * i/ballRadSteps);
-                            radiusPoints[i*4 + 2] = false;
-                            radiusPoints[i*4 + 3] = 2*Math.PI * i/ballRadSteps;
-                        }
+                        var radiusPoints = makeRadiusPoints(objects[index], ballRadSteps);
                         
                         // Check type of object
                         switch (objects[index2].type) {
@@ -161,6 +161,7 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                             case "paddle":
                             case "wall":
                                 // Check if ball inside wall bounds
+                                // Note: radiusCheckCollision modifies radiusPoints to show where collisions occurred.
                                 if (radiusCheckCollision(radiusPoints, objects[index2])) {
                                 
                                     if (debug > 0) {
@@ -177,9 +178,13 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                     newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle);
                                     newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
                                     
-                                    // Move ball out of collision range
-                                    newObjects[index].x += newObjects[index].vx * time;
-                                    newObjects[index].y += newObjects[index].vy * time;
+                                    // Move ball until collision is no longer happening
+                                    radiusPoints = makeRadiusPoints(newObjects[index], ballRadSteps);
+                                    while (radiusCheckCollision(radiusPoints, objects[index2])) {
+                                        newObjects[index].x += newObjects[index].vx * time;
+                                        newObjects[index].y += newObjects[index].vy * time;
+                                        radiusPoints = makeRadiusPoints(newObjects[index], ballRadSteps);
+                                    }
                                 }
                             break;
                             
@@ -190,6 +195,12 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
                                 break;
                         }
                     }
+                    break;
+                
+                case "paddle":
+                    // Move paddle according to velocities given
+                    newObjects[index].x += newObjects[index].vx * time;
+                    newObjects[index].y += newObjects[index].vy * time;
                     break;
                 
                 default:
@@ -207,5 +218,5 @@ var SimplePhysicsEngine = function (pxWidth, pxHeight, debug) {
         }
     };
 
-    init(pxWidth, pxHeight);
+    init(managerObject, debug);
 };
