@@ -1,37 +1,36 @@
 /*
-	Controller which listens for key input and controls 
+Controller which listens for key input and controls 
 */
-var Controller = function (paddle) {
-	// key events
-	keys = [];
+var Controller = function (id) {
+    // paddle Controller
+    function init() {};
+    // key events
+    keys = [];
+    var this.controllerID = id
 
+    document.addEventListener("keydown", function (e) {keys[e.keyCode] = true;});
+    document.addEventListener("keyup", function (e) {keys[e.keyCode] = false;});    
+    
+    var up = 38;
+    var down = 40;
+    var left = 37;
+    var right = 39;
 
-	document.addEventListener("keydown", function (e) {keys[e.keyCode] = true;});
-	document.addEventListener("keyup", function (e) {keys[e.keyCode] = false;});	
-	
-	var up = 38;
-	var down = 40;
-	var left = 37;
-	var right = 39;
-	var vx, vy;
+    this.checkKey = function (paddle) {
+        //Finds a paddle object and applies adjustments from input keys to its position
+        //Later versions will have settings for which paddle is bound to which keys
+        console.log("paddle| vx:" + paddle.vx + " | vy:"+ paddle.vy);
 
-	function checkKey(e) {
-		//Finds a paddle object and applies adjustments from input keys to its position
-		//Later versions will have settings for which paddle is bound to which keys
-		console.log("Paddle| vx:" + paddle.vx + " | vy:"+ paddle.vy);
+        if (keys[up] && keys[down]) paddle.vy = 0;
+        else if (keys[up]) paddle.vy = -3;
+        else if (keys[down]) paddle.vy = 3;
+        else paddle.vy = 0;
+        
+        if (keys[left] && keys[right]) paddle.vx = 0;
+        else if (keys[left]) paddle.vx = -3;
+        else if (keys[right]) paddle.vx = 3;
+        else paddle.vx = 0;
 
-		if (keys[up] && keys[down]) paddle.vy = 0;
-	    else if (keys[up]) paddle.vy = -1;
-	    else if (keys[down]) paddle.vy = 1;
-	    else paddle.vy = 0;
-	    
-	    if (keys[left] && keys[right]) paddle.vx = 0;
-	    else if (keys[left]) paddle.vx = -1;
-	    else if (keys[right]) paddle.vx = 1;
-	    else paddle.vx = 0;
-
-	}
-	//Presently invoked once per millisecond, should be invoked by physics engine later
-	//It is important that the physics engine control the controller updates so taht paddles move with the same lag as the ball
-	var paddleControlUpdateInterval = setInterval(function () {checkKey()},10);
+    }
+    init(paddle);
 };
