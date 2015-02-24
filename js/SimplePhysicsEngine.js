@@ -169,6 +169,15 @@ var SimplePhysicsEngine = function (managerObject, debug) {
                                         this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
                                     }
                                     
+                                    //Check if wall has owner
+                                    if (objects[index2].owner !== null) {
+                                        //Increment score as test
+                                        scores[0]++;
+                                        if (debug > 0) {
+                                            this.dlog("Object has owner" + objects[index2].owner , "SimplePhysicsEngine");
+                                        }
+                                    }
+                                    
                                     // Determine angle of incidence
                                     var angle = findAngleOfIncidence(radiusPoints);
                                     
