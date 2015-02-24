@@ -1,7 +1,7 @@
 /**
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
-var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height) {
+var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, player_position) {
     // html5 canvas objects
     var canvas = null;
     var context = null;
@@ -60,11 +60,14 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         // fill the background
-        drawRectangle(0, 0, canvas.width, canvas.height, default_background_color);
+        drawRectangle(0, 0, pw, ph, default_background_color);
 
         // draw the border and score
         this.drawBorder();
         this.drawScore(score);
+
+        // undo rotation
+        undoRot(player_position);
 
         // draw all game objects
         for (var i in objects) {
@@ -76,6 +79,9 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
                 drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, default_paddle_color);
             }
         }
+
+        // rotate the canvas into position
+        rotateDown(player_position);
     };
 
     /**
@@ -109,10 +115,10 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
      * Draw the border of the playing field to the screen
      */
     this.drawBorder = function () {
-        drawRectangle(0, 0, context.canvas.width, scaleY(border_width), this.border_color);                                            // top
-        drawRectangle(0, context.canvas.height-scaleY(border_width), context.canvas.width, scaleY(border_width), this.border_color);      // bottom
-        drawRectangle(0, 0, scaleX(border_width), context.canvas.height, this.border_color);                                           // left
-        drawRectangle(context.canvas.width-scaleX(border_width), 0, scaleX(border_width), context.canvas.height, this.border_color);      // right
+        drawRectangle(0, 0, pw, border_width, this.border_color);                                            // top
+        drawRectangle(0, ph-border_width, pw, border_width, this.border_color);      // bottom
+        drawRectangle(0, 0, border_width, ph, this.border_color);                                           // left
+        drawRectangle(pw-border_width, 0, border_width, ph, this.border_color);      // right
     };
 
     /**
@@ -120,12 +126,12 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
      */
     this.drawScore = function (score) {
         context.fillStyle = this.score_color;
-        context.font = "bold " + border_width*0.75 + "px Arial";
+        context.font = "bold " + scaleX(border_width)*0.75 + "px Arial";
         context.textAlign = 'left';
         context.textBaseline = 'middle';
 
         for (var i =0; i<score.length; i++) {
-            context.fillText("Team " + (i + 1) + ": " + score[i], border_width*1.1 + border_width*(5*i), border_width/2);
+            context.fillText("Team " + (i + 1) + ": " + score[i], scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
         }
     };
 
@@ -190,13 +196,36 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
             case 'd':
                 return;
             case 'u':
+                context.translate(context.canvas.width, context.canvas.height);
                 context.rotate(Math.PI);
                 return;
             case 'l':
+                context.translate(0, context.canvas.height);
                 context.rotate(Math.PI * 1.5);
                 return;
             case 'r':
+                context.translate(context.canvas.width, 0);
                 context.rotate(Math.PI * 0.5);
+                return;
+        }
+    }
+
+    /**
+     * Undoes the rotate down function
+     * @param  {char} player_position The position of the player. t = top, b = bot, u = up, d = down
+     */
+    function undoRot(player_position) {
+        switch (player_position) {
+            case 'd':
+                return;
+            case 'u':
+                rotateDown('u');
+                return;
+            case 'l':
+                rotateDown('r');
+                return;
+            case 'r':
+                rotateDown('l');
                 return;
         }
     }
