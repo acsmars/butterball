@@ -1,13 +1,16 @@
 /**
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
-var GraphicsManager = function (canvas_container, width, height) {
+var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, player_position) {
+    // html5 canvas objects
     var canvas = null;
     var context = null;
 
-    var wall_color = null;
-    var ball_color = null;
+    // the width and height of the actual playing field
+    var pw = null;
+    var ph = null;
 
+    // default colors
     var default_border_color = "#402E27"; // dark brown
     var default_background_color = "#F2DEA0"; // wheat
     var default_ball_color = "#8C6542"; // brown
@@ -15,7 +18,8 @@ var GraphicsManager = function (canvas_container, width, height) {
     var default_paddle_color = "#8C6542"; // brown
     var default_text_color = "#D9AB80"; // tan
 
-    this.border_width = 30;
+    // border and scoring information
+    var border_width = 30;
     this.border_color = default_border_color;
     this.score_color = default_text_color;
 
@@ -25,10 +29,12 @@ var GraphicsManager = function (canvas_container, width, height) {
      * @param  {int} width            The width of the canvas. Defaults to 500.
      * @param  {int} height           The height of the canvas. Defaults to 500.
      */
-    function init(canvas_container, width, height) {
+    function init(canvas_container, width, height, phys_width, phys_height) {
         // set default values
         width = typeof width !== 'undefined' ? width : 1000;
         height = typeof height !== 'undefined' ? height : 1000;
+        pw = typeof phys_width !== 'undefined' ? phys_width : width;
+        ph = typeof phys_height !== 'undefined' ? phys_height : height;
 
         // create the canvas
         canvas = document.createElement('canvas');
@@ -54,11 +60,14 @@ var GraphicsManager = function (canvas_container, width, height) {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         // fill the background
-        drawRectangle(0, 0, canvas.width, canvas.height, default_background_color);
+        drawRectangle(0, 0, pw, ph, default_background_color);
 
         // draw the border and score
         this.drawBorder();
         this.drawScore(score);
+
+        // undo rotation
+        undoRot(player_position);
 
         // draw all game objects
         for (var i in objects) {
@@ -70,6 +79,9 @@ var GraphicsManager = function (canvas_container, width, height) {
                 drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, default_paddle_color);
             }
         }
+
+        // rotate the canvas into position
+        rotateDown(player_position);
     };
 
     /**
@@ -83,6 +95,11 @@ var GraphicsManager = function (canvas_container, width, height) {
         // set default values
         color = color !== null ? color : default_ball_color;
         radius = typeof radius !== 'undefined' ? radius : 3.0;
+
+        // scale the objects to pixels
+        x = scaleX(x);
+        y = scaleY(y);
+        radius = (scaleX(radius) + scaleY(radius))/2;
 
         // create the circle
         context.beginPath();
@@ -98,10 +115,10 @@ var GraphicsManager = function (canvas_container, width, height) {
      * Draw the border of the playing field to the screen
      */
     this.drawBorder = function () {
-        drawRectangle(0, 0, context.canvas.width, this.border_width, this.border_color);                                            // top
-        drawRectangle(0, context.canvas.height-this.border_width, context.canvas.width, this.border_width, this.border_color);      // bottom
-        drawRectangle(0, 0, this.border_width, context.canvas.height, this.border_color);                                           // left
-        drawRectangle(context.canvas.width-this.border_width, 0, this.border_width, context.canvas.height, this.border_color);      // right
+        drawRectangle(0, 0, pw, border_width, this.border_color);                                            // top
+        drawRectangle(0, ph-border_width, pw, border_width, this.border_color);      // bottom
+        drawRectangle(0, 0, border_width, ph, this.border_color);                                           // left
+        drawRectangle(pw-border_width, 0, border_width, ph, this.border_color);      // right
     };
 
     /**
@@ -109,12 +126,12 @@ var GraphicsManager = function (canvas_container, width, height) {
      */
     this.drawScore = function (score) {
         context.fillStyle = this.score_color;
-        context.font = "bold " + this.border_width*0.75 + "px Arial";
+        context.font = "bold " + scaleX(border_width)*0.75 + "px Arial";
         context.textAlign = 'left';
         context.textBaseline = 'middle';
 
         for (var i =0; i<score.length; i++) {
-            context.fillText("Team " + (i + 1) + ": " + score[i], this.border_width*1.1 + this.border_width*(5*i), this.border_width/2);
+            context.fillText("Team " + (i + 1) + ": " + score[i], scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
         }
     };
 
@@ -130,6 +147,12 @@ var GraphicsManager = function (canvas_container, width, height) {
         // set default values
         color = typeof color !== 'undefined' ? color : default_wall_color;
 
+        // scale the real coordinates to pixel coordinates
+        x = scaleX(x);
+        y = scaleY(y);
+        width = scaleX(width);
+        height = scaleY(height);
+
         // set the rectangle's color
         context.fillStyle = color;
 
@@ -137,6 +160,76 @@ var GraphicsManager = function (canvas_container, width, height) {
         context.fillRect(x, y, width, height);
     }
 
+    /**
+     * scale an actual x position to a graphical y position
+     * @param  {float} x The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
+    function scaleX(x) {
+        return context.canvas.width*(x/pw);
+    }
+
+    /**
+     * scale an actual y position to a graphical y position
+     * @param  {float} y The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
+    function scaleY(y) {
+        return context.canvas.height*(y/ph);
+    }
+
+    /**
+     * Set the border width of the playing field
+     * @param {int} w The new width
+     */
+    this.setBorderWidth = function (w) {
+        border_width = w;
+    };
+
+    /**
+     * Rotate the playing field so that the player always sees his/her goal
+     * at the bottom of the screen
+     * @param  {char} player_position The position of the player. t = top, b = bot, u = up, d = down
+     */
+    function rotateDown(player_position) {
+        switch (player_position) {
+            case 'd':
+                return;
+            case 'u':
+                context.translate(context.canvas.width, context.canvas.height);
+                context.rotate(Math.PI);
+                return;
+            case 'l':
+                context.translate(0, context.canvas.height);
+                context.rotate(Math.PI * 1.5);
+                return;
+            case 'r':
+                context.translate(context.canvas.width, 0);
+                context.rotate(Math.PI * 0.5);
+                return;
+        }
+    }
+
+    /**
+     * Undoes the rotate down function
+     * @param  {char} player_position The position of the player. t = top, b = bot, u = up, d = down
+     */
+    function undoRot(player_position) {
+        switch (player_position) {
+            case 'd':
+                return;
+            case 'u':
+                rotateDown('u');
+                return;
+            case 'l':
+                rotateDown('r');
+                return;
+            case 'r':
+                rotateDown('l');
+                return;
+        }
+    }
+
     // initialize the oject
-    init(canvas_container, width, height);
+    init(canvas_container, width, height, phys_width, phys_height);
 };
