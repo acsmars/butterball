@@ -62,10 +62,6 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         // fill the background
         drawRectangle(0, 0, pw, ph, default_background_color);
 
-        // draw the border and score
-        this.drawBorder();
-        this.drawScore(score);
-
         // undo rotation
         undoRot(player_position);
 
@@ -82,6 +78,11 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
 
         // rotate the canvas into position
         rotateDown(player_position);
+
+        // draw the border and score
+        this.drawBorder();
+        this.drawScore(score);
+
     };
 
     /**
