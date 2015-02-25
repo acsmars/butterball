@@ -6,7 +6,7 @@ var Controller = function (id) {
     function init() {};
     // key events
     keys = [];
-    var this.controllerID = id
+    var controllerID = id;
 
     document.addEventListener("keydown", function (e) {keys[e.keyCode] = true;});
     document.addEventListener("keyup", function (e) {keys[e.keyCode] = false;});    
