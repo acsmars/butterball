@@ -14,7 +14,7 @@
 	var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h);
 
 	// physics engine
-	var phys = new SimplePhysicsEngine(this, 0);
+	var phys = new SimplePhysicsEngine(0);
 
     // controller1
     var con1 = new Controller(1);
@@ -32,10 +32,14 @@
 	var scores = [0, 0, 0];
 
     gfx.draw(objs, scores);
+    
+    objs[0].owner = "Team1";
+    objs[1].owner = "Team2";
+    objs[2].owner = "Team3";
 
     // update loop set at one update every 10ms
     window.setInterval(function() {
-        phys.step(objs, 1);
+        phys.step(objs, scores, 1);
         gfx.draw(objs, scores);
         con1.checkKey(objs[5]);
     }, 10);
