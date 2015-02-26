@@ -21,7 +21,7 @@
     });
     // Skipping this test due to large output and error caused by how Ball is instantiated with a redundant controller
     // Note that I have to pass objects through the JSON parser to make the constructor the same so deepEqual works correctly.
-    QUnit.skip("Object list passthrough", function( assert ) {
+    QUnit.test("Object list passthrough", function( assert ) {
         var objs = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 0, 0), new paddle(0, 30, 30, 10), new wall(60, 60, 100, 20)]));
         var resultObjects = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 0, 0), new paddle(0, 30, 30, 10), new wall(60, 60, 100, 20)]));
         
