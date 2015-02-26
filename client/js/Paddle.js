@@ -10,6 +10,5 @@ function paddle (x, y, width, height) {
 	this.height = typeof height !== 'undefined' ? height : 0;
 	this.vx = 0;
 	this.vy = 0;
-	this.controller = new Controller(this);
 }
 

@@ -9,7 +9,7 @@ var Controller = function (id) {
     var controllerID = id;
 
     document.addEventListener("keydown", function (e) {keys[e.keyCode] = true;});
-    document.addEventListener("keyup", function (e) {keys[e.keyCode] = false;});    
+    document.addEventListener("keyup", function (e) {keys[e.keyCode] = false;});
     
     var up = 38;
     var down = 40;
