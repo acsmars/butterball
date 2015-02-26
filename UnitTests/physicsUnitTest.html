@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.17.1.css">
+    <script src="http://code.jquery.com/qunit/qunit-1.17.1.js"></script>
+    <script src="../client/js/SimplePhysicsEngine.js"></script>
+    <script src="../client/js/Ball.js"></script>
+    <script src="../client/js/Wall.js"></script>
+    <script src="../client/js/Paddle.js"></script>
+    <script src="../client/js/Controller.js"></script>
+
+    <script>
+    var PhysicsEngine = null;
+    var scores = [0,0,0];
+    
+    QUnit.module("SimplePhysicsEngine");
+    QUnit.test("Instantiation", function( assert ) {
+        assert.throws(initalizePhysics());
+        assert.ok(PhysicsEngine);
+    });
+    // Skipping this test due to large output and error caused by how Ball is instantiated with a redundant controller
+    // Note that I have to pass objects through the JSON parser to make the constructor the same so deepEqual works correctly.
+    QUnit.skip("Object list passthrough", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 0, 0), new paddle(0, 30, 30, 10), new wall(60, 60, 100, 20)]));
+        var resultObjects = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 0, 0), new paddle(0, 30, 30, 10), new wall(60, 60, 100, 20)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.deepEqual(objs, resultObjects, "Check that objects were unchanged");
+    });
+    QUnit.test("Step ball object by 1u x-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 1, 0)]));
+        var resultObjects = JSON.parse(JSON.stringify([new ball('red', 1, 0, 10, 1, 0)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.deepEqual(objs[0], resultObjects[0]);
+    });
+    QUnit.test("Step ball object by 1u x and y-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 0, 0, 10, 1, 1)]));
+        var resultObjects = JSON.parse(JSON.stringify([new ball('red', 1, 1, 10, 1, 1)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.deepEqual(objs[0], resultObjects[0]);
+    });
+    QUnit.test("Ball collision with wall reverses velocity x-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, -11, 0), new wall(0, 0, 10, 100)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.ok(objs[0].vx > 0, "Determine if x-velocity is > 0");
+    });
+    QUnit.test("Ball collision with wall reverses velocity y-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, 0, -11), new wall(0, 0, 100, 10)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.ok(objs[0].vy > 0, "Determine if y-velocity is > 0");
+    });
+    QUnit.test("Ball collision with wall reverses velocity x and y-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, -11, -11), new wall(0, 0, 10, 100), new wall(0, 0, 100, 10)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.ok(objs[0].vx > 0, "Determine if x-velocity is > 0");
+        assert.ok(objs[0].vy > 0, "Determine if y-velocity is > 0");
+    });
+    QUnit.test("Ball collision with Team1 owned wall increments Team1 score", function( assert ) {
+        var resultScores = [1,0,0];
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, -11, 0), new wall(0, 0, 10, 100)]));
+        objs[1].owner = "Team1";
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.deepEqual(scores, resultScores, "Check score = [1,0,0]");
+    });
+    QUnit.test("Ball collision with Team2 owned wall increments Team2 score", function( assert ) {
+        var resultScores = [0,1,0];
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, -11, 0), new wall(0, 0, 10, 100)]));
+        objs[1].owner = "Team2";
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.deepEqual(scores, resultScores, "Check score = [1,0,0]");
+    });
+    QUnit.test("Ball collision with paddle reverses velocity x and y-axis", function( assert ) {
+        var objs = JSON.parse(JSON.stringify([new ball('red', 10, 10, 10, 5, 5), new paddle(15, 15, 10, 10)]));
+        
+        initalizePhysics();
+        assert.throws(PhysicsEngine.step(objs, scores, 1), "Check .step for uncaught exceptions");
+        assert.ok(objs[0].vx < 0, "Determine if x-velocity is < 0");
+        assert.ok(objs[0].vy < 0, "Determine if y-velocity is < 0");
+    });
+    
+    var initalizePhysics = function () {
+        PhysicsEngine = new SimplePhysicsEngine(0);
+        scores = [0,0,0];
+    }
+    
+    </script>
+    </head>
+<body>
+
+<div id="qunit"></div>
+
+</body>
+</html>
