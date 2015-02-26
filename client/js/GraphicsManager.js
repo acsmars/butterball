@@ -1,7 +1,7 @@
 /**
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
-var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, player_position) {
+var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, gfx_window_width, gfx_window_height, player_position) {
     // html5 canvas objects
     var canvas = null;
     var context = null;
@@ -29,12 +29,14 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
      * @param  {int} width            The width of the canvas. Defaults to 500.
      * @param  {int} height           The height of the canvas. Defaults to 500.
      */
-    function init(canvas_container, width, height, phys_width, phys_height) {
+    function init() {
         // set default values
         width = typeof width !== 'undefined' ? width : 1000;
         height = typeof height !== 'undefined' ? height : 1000;
         pw = typeof phys_width !== 'undefined' ? phys_width : width;
         ph = typeof phys_height !== 'undefined' ? phys_height : height;
+        gfx_window_width = typeof gfx_window_width !== 'undefined' ? gfx_window_width : width;
+        gfx_window_height = typeof gfx_window_height !== 'undefined' ? gfx_window_height : height;
 
         // create the canvas
         canvas = document.createElement('canvas');
@@ -46,8 +48,8 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         context = canvas.getContext('2d');
 
         // resize the canvas
-        context.canvas.width = width;
-        context.canvas.height = height;
+        context.canvas.width = gfx_window_width;
+        context.canvas.height = gfx_window_height;
     }
 
     /**
@@ -166,18 +168,36 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
      * @param  {float} x The real world coordinate
      * @return {float}   The pixel world coordinate
      */
-    function scaleX(x) {
+    scaleX = function (x) {
         return context.canvas.width*(x/pw);
-    }
+    };
 
     /**
      * scale an actual y position to a graphical y position
      * @param  {float} y The real world coordinate
      * @return {float}   The pixel world coordinate
      */
-    function scaleY(y) {
+    scaleY = function (y) {
         return context.canvas.height*(y/ph);
-    }
+    };
+
+    /**
+     * scale an actual y position to a graphical y position. USE ONLY FOR TESTING!
+     * @param  {float} y The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
+    this.testScaleY = function (y) {
+        return scaleY(y);
+    };
+
+    /**
+     * scale an actual x position to a graphical x position. USE ONLY FOR TESTING!
+     * @param  {float} x The real world coordinate
+     * @return {float}   The pixel world coordinate
+     */
+    this.testScaleX = function (x) {
+        return scaleX(x);
+    };
 
     /**
      * Set the border width of the playing field
