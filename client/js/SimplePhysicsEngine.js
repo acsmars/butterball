@@ -2,13 +2,13 @@
  * SimplePhysicsEngine creates, initializes, and manages a non-raycast enabled
  * physics engine for ButterBall.
  */
-var SimplePhysicsEngine = function (managerObject, debug) {
+var SimplePhysicsEngine = function (debug) {
     
     // Determines number of degrees of accuracy when colliding ball
     // (Number of points to check around perimiter when colliding)
     // May need to be adjusted depending on load
     // Reccomend 8
-    var ballRadSteps = 16;
+    var ballRadSteps = 32;
     
     //TODO: replace gameManager instance with message handler?
     function init(managerObject, debug) {
@@ -110,7 +110,7 @@ var SimplePhysicsEngine = function (managerObject, debug) {
      * @param  {Array} objects Array of objects that affect/effect physics simulation
      * @param  {Int} time Amount of time in ticks that will pass in this next step
      */
-    this.step = function (objects, time) {
+    this.step = function (objects, scores, time) {
         // Iterate through objects and determine future positions
         // will need to be improved for odd shapes/momentums in future
         var index, len;
@@ -171,8 +171,21 @@ var SimplePhysicsEngine = function (managerObject, debug) {
                                     
                                     //Check if wall has owner
                                     if (objects[index2].owner !== null) {
-                                        //Increment score as test
-                                        scores[0]++;
+                                        switch (objects[index2].owner) {
+                                            case "Team1":
+                                                scores[0]++;
+                                                break;
+                                            case "Team2":
+                                                scores[1]++;
+                                                break;
+                                            case "Team3":
+                                                scores[2]++;
+                                                break;
+                                            default:
+                                                if (debug > 0) {
+                                                    this.dlog("Object has unknown owner" + objects[index2].owner , "SimplePhysicsEngine");
+                                                }
+                                        }
                                         if (debug > 0) {
                                             this.dlog("Object has owner" + objects[index2].owner , "SimplePhysicsEngine");
                                         }
@@ -228,5 +241,5 @@ var SimplePhysicsEngine = function (managerObject, debug) {
         }
     };
 
-    init(managerObject, debug);
+    init(debug);
 };
