@@ -1,7 +1,7 @@
 /**
  * GraphicsManager creates, initializes, and manages an HTML5 canvas for ButterBall.
  */
-var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, gfx_window_width, gfx_window_height, player_position) {
+var GraphicsManager = function (canvas_container, width, height, phys_width, phys_height, gfx_window_width, gfx_window_height, player_id, dlog) {
     // html5 canvas objects
     var canvas = null;
     var context = null;
@@ -10,6 +10,10 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
     var pw = null;
     var ph = null;
 
+    // the ratio between the graphics world height and the window height
+    var h_ratio = null;
+    var w_ratio = null;
+
     // default colors
     var default_border_color = "#402E27"; // dark brown
     var default_background_color = "#F2DEA0"; // wheat
@@ -17,6 +21,9 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
     var default_wall_color = "#8C6542"; // brown
     var default_paddle_color = "#8C6542"; // brown
     var default_text_color = "#D9AB80"; // tan
+
+    // set the player's position
+    var player_position = null;
 
     // border and scoring information
     var border_width = 30;
@@ -37,6 +44,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         ph = typeof phys_height !== 'undefined' ? phys_height : height;
         gfx_window_width = typeof gfx_window_width !== 'undefined' ? gfx_window_width : width;
         gfx_window_height = typeof gfx_window_height !== 'undefined' ? gfx_window_height : height;
+        dlog = typeof dlog !== 'undefined' ? dlog : 0;
 
         // create the canvas
         canvas = document.createElement('canvas');
@@ -50,6 +58,18 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         // resize the canvas
         context.canvas.width = gfx_window_width;
         context.canvas.height = gfx_window_height;
+
+        // scale the canvas
+        h_ratio = height/gfx_window_height;
+        w_ratio = width/gfx_window_width;
+        context.scale(w_ratio, h_ratio);
+        // context.translate(-context.canvas.width/w_ratio, -context.canvas.height/h_ratio); // bot right
+        // context.translate(-context.canvas.width/w_ratio, 0); // top right
+        // context.translate(0, -context.canvas.height/h_ratio); // bot left
+        // positionPlayer(0); // PICKUP
+        //
+        player_position = getPlayerSide(player_id);
+        positionPlayer(player_id);
     }
 
     /**
@@ -251,6 +271,75 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         }
     }
 
+
+    /**
+     * Put the screen at the player's correct location
+     * @param  {int} player_id the id of the player
+     */
+    function positionPlayer(player_id) {
+        var tx = 0;
+        var ty = 0;
+        switch (getPlayerSide(player_id)) {
+            case 'd':
+                tx = -(w_ratio - 1 - (player_id - w_ratio - h_ratio))*context.canvas.width/w_ratio; // move from right to left
+                ty = -(h_ratio - 1)*context.canvas.height/h_ratio;                                  // show the bottom
+                context.translate(tx, ty);
+                break;
+            case 'u':
+                tx = -player_id*context.canvas.width/w_ratio; // move from left to right
+                context.translate(tx, ty);
+                break;
+            case 'l':
+                ty = -(h_ratio - 1 - (player_id - 2*w_ratio - h_ratio))*context.canvas.height/h_ratio; // move bottom to top
+                context.translate(tx, ty);
+                break;
+            case 'r':
+                tx = -(w_ratio - 1)*context.canvas.width/w_ratio;        // show the right wall
+                ty = -(player_id - w_ratio)*context.canvas.height/h_ratio; // move top to bottom
+                context.translate(tx, ty);
+                break;
+        }
+
+        if (dlog) {
+            console.log(getPlayerSide(player_id), player_id, tx, ty);
+        }
+    }
+
+    /**
+     * Takes a player id and returns where that player resides on the playing field. This assumes that
+     * players are arranged around a playing field in the following way:
+     *
+     *   0  1  2  3  4
+     * 17+-----------+5
+     * 16|           |6
+     * 15|           |7
+     * 14+-----------+8
+     *   13 12 11 10 9
+     * @param  {int} player_id the player's id
+     * @return {char}           Which side of the board the player is on (u = up, d = down, l = left, r = right)
+     */
+    function getPlayerSide(player_id) {
+        if (player_id < w_ratio) {
+            return 'u';
+        } else if (player_id < w_ratio + h_ratio) {
+            return 'r';
+        } else if (player_id < 2*w_ratio + h_ratio) {
+            return 'd';
+        } else if (player_id < 2*w_ratio + 2*h_ratio) {
+            return 'l';
+        }
+
+        throw "Invalid player id! No valid player position found! Player ids should be between 0 and " + String(2*w_ratio + 2*h_ratio);
+    }
+
+    /**
+     * Delete the current canvas object.
+     */
+    this.del = function () {
+        canvas_container.removeChild(canvas);
+        canvas = null;
+    };
+
     // initialize the oject
-    init(canvas_container, width, height, phys_width, phys_height);
+    init();
 };
