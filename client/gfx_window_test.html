@@ -16,7 +16,7 @@
 <script type="text/javascript">
     var id = 0;
     var gfx = null;
-    var mod = 3;
+    var mod = 2;
 
     gfx = new GraphicsManager(
             document.getElementById("canvas_container"),
@@ -36,10 +36,10 @@
         new wall(100, 380, 300, 20),
         new wall(380, 100, 20, 300),
         new ball('green', 200, 200, 10),
-        new ball('green', window.innerHeight*mod/2, window.innerHeight*mod/2, window.innerHeight*mod/3),
-        new paddle(200, 400, 70, 10)];
+        // new ball('green', window.innerHeight*mod/2, window.innerHeight*mod/2, window.innerHeight*mod/3),
+        new paddle(0, 0, window.innerHeight*mod/3, window.innerHeight*mod/5)];
 
-    var cont = new Controller(objs[5]);
+    var cont = new Controller(1);
     var scores = [0, 0, 0];
     gfx.draw(objs, scores);
 
@@ -47,8 +47,9 @@
     objs[4].vy = 6;
 
     window.setInterval(function() {
-        phs.step(objs, 1);
+        phs.step(objs, scores, 1);
         gfx.draw(objs, scores);
+        con.checkKey(objs[5]);
         // gfx2.draw(objs, scores);
     }, 10);
 
