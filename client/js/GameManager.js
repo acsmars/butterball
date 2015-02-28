@@ -26,7 +26,7 @@
         new wall(w - 30, 0, 30, h), // right
         new wall(0, h - 30, w, 30), // bot
         new ball('green', 50, 50, 10, 3, 3),
-        new paddle(200, 400, 70, 10)];
+        new paddle(200, 400, 100, 20)];
 
 	// The first player will be player number 0 for code purposes
 	var scores = [0, 0, 0];

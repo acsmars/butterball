@@ -22,13 +22,13 @@ var Controller = function (id) {
         console.log("paddle| vx:" + paddle.vx + " | vy:"+ paddle.vy);
 
         if (keys[up] && keys[down]) paddle.vy = 0;
-        else if (keys[up]) paddle.vy = -3;
-        else if (keys[down]) paddle.vy = 3;
+        else if (keys[up]) paddle.vy = -4;
+        else if (keys[down]) paddle.vy = 4;
         else paddle.vy = 0;
         
         if (keys[left] && keys[right]) paddle.vx = 0;
-        else if (keys[left]) paddle.vx = -3;
-        else if (keys[right]) paddle.vx = 3;
+        else if (keys[left]) paddle.vx = -4;
+        else if (keys[right]) paddle.vx = 4;
         else paddle.vx = 0;
 
     }
