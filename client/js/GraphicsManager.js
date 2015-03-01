@@ -82,7 +82,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         drawRectangle(0, 0, pw, ph, default_background_color);
 
         // undo rotation
-        if (w_ratio <= 2 && h_ratio <= 2) {
+        if (w_ratio <= 1 && h_ratio <= 1) {
             undoRot(player_position);
         }
 
@@ -98,7 +98,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         }
 
         // rotate the canvas into position
-        if (w_ratio <= 2 && h_ratio <= 2) {
+        if (w_ratio <= 1 && h_ratio <= 1) {
             rotateDown(player_position);
         }
 
