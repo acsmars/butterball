@@ -104,6 +104,61 @@ var SimplePhysicsEngine = function (debug) {
             radiusPoints[i*4 + 3] = 2*Math.PI * i/ballRadSteps;
         }
      }.bind(this);
+     
+    /**
+     * Modify boolean array depending on collsions between wall and paddle
+     * @param {Array} collisions Array in the format (bool top, bool left, bool bottom, bool right)
+     * @param {paddle} paddle Paddle object
+     * @param {wall} wall Paddle object
+     * @return {Bool} True if collision happened
+     */
+    var paddleWallCollisions = function (collisions, paddle, wall) {
+        
+        //Top
+        if (//Upper left corner
+            paddle.x > wall.x && paddle.y > wall.y &&
+            paddle.x < (wall.x + wall.width) && paddle.y < (wall.y + wall.height) &&
+            //Upper right corner
+            (paddle.x + paddle.width) > wall.x && paddle.y > wall.y &&
+            (paddle.x + paddle.width) < (wall.x + wall.width) && paddle.y < (wall.y + wall.height)) {
+            
+            collisions[0] = true;
+        }
+        
+        //Left
+        if (//Upper left corner
+            paddle.x > wall.x && paddle.y > wall.y &&
+            paddle.x < (wall.x + wall.width) && paddle.y < (wall.y + wall.height) &&
+            //Lower left corner
+            paddle.x > wall.x && (paddle.y + paddle.height) > wall.y &&
+            paddle.x < (wall.x + wall.width) && (paddle.y + paddle.height) < (wall.y + wall.height)) {
+            
+            collisions[1] = true;
+        }
+        
+        //Bottom
+        if (//Lower left corner
+            paddle.x > wall.x && (paddle.y + paddle.height) > wall.y &&
+            paddle.x < (wall.x + wall.width) && (paddle.y + paddle.height) < (wall.y + wall.height) &&
+            //Lower right corner
+            (paddle.x + paddle.width) > wall.x && (paddle.y + paddle.height) > wall.y &&
+            (paddle.x + paddle.width) < (wall.x + wall.width) && (paddle.y + paddle.height) < (wall.y + wall.height)) {
+            
+            collisions[2] = true;
+        }
+        
+        //Right
+         if (//Upper right corner
+            (paddle.x + paddle.width) > wall.x && paddle.y > wall.y &&
+            (paddle.x + paddle.width) < (wall.x + wall.width) && paddle.y < (wall.y + wall.height) &&
+            //Lower right corner
+            (paddle.x + paddle.width) > wall.x && (paddle.y + paddle.height) > wall.y &&
+            (paddle.x + paddle.width) < (wall.x + wall.width) && (paddle.y + paddle.height) < (wall.y + wall.height)) {
+            
+            collisions[3] = true;
+        }
+        
+    }.bind(this);
 
     /**
      * Step all pasted objects by 'time' physics ticks
@@ -169,8 +224,8 @@ var SimplePhysicsEngine = function (debug) {
                                         this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
                                     }
                                     
-                                    //Check if wall has owner
-                                    if (objects[index2].owner !== null) {
+                                    //Check if object has owner
+                                    if (objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null) {
                                         switch (objects[index2].owner) {
                                             case "Team1":
                                                 scores[0]++;
@@ -198,8 +253,14 @@ var SimplePhysicsEngine = function (debug) {
                                     var dotProduct = objects[index].vx * Math.cos(angle) + objects[index].vy * Math.sin(angle);
                                     
                                     // Determine new velocities
+                                    // Standard reflection velocity
                                     newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle);
                                     newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
+                                    // If object collided with has velocity, determine how ball velocity affected.
+                                    if(objects[index2].hasOwnProperty("vx") && objects[index2].hasOwnProperty("vy")) {
+                                        newObjects[index].vx += objects[index2].vx * Math.abs(Math.cos(angle));
+                                        newObjects[index].vy += objects[index2].vy * Math.abs(Math.sin(angle));
+                                    }
                                     
                                     // Move ball until collision is no longer happening
                                     makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
@@ -221,11 +282,42 @@ var SimplePhysicsEngine = function (debug) {
                     break;
                 
                 case "paddle":
-                    // Move paddle according to velocities given
-                    newObjects[index].x += newObjects[index].vx * time;
-                    newObjects[index].y += newObjects[index].vy * time;
+                    // Check if paddle is colliding with any walls
+                    var collisions = [false, false, false, false];
+                    
+                    // More for loops. Hooray!
+                    for (index2 = 0, len2 = objects.length; index2 < len2; ++index2) {
+                        paddleWallCollisions(collisions, objects[index], objects[index2])
+                    }
+                    
+                    // Check top collision
+                    if ((Math.sign(newObjects[index].vy) == -1) && collisions[0]) {
+                        // Don't move paddle
+                    }
+                    //Check bottom collision
+                    else if ((Math.sign(newObjects[index].vy) == 1) && collisions[2]) {
+                        // Don't move paddle
+                    }
+                    else {
+                        // Move paddle according to velocities given
+                        newObjects[index].y += newObjects[index].vy * time;
+                    }
+                    
+                    // Check left collision
+                    if ((Math.sign(newObjects[index].vx) == -1) && collisions[1]) {
+                        // Don't move paddle
+                    }
+                    //Check right collision
+                    else if ((Math.sign(newObjects[index].vx) == 1) && collisions[3]) {
+                        // Don't move paddle
+                    }
+                    else {
+                        // Move paddle according to velocities given
+                        newObjects[index].x += newObjects[index].vx * time;
+                    }
+                    
                     break;
-                
+                        
                 default:
                     // Ignore static objects
                     if (debug > 0) {
@@ -238,6 +330,9 @@ var SimplePhysicsEngine = function (debug) {
         // Have do do by index because JavaScript is dumb when handling array references >:(
         for (index = 0, len = objects.length; index < len; ++index) {
             objects[index] = newObjects[index];
+            // Limit velocities 
+            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 5) { newObjects[index].vx = 5 }
+            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 5) { newObjects[index].vy = 5 }
         }
     };
 
