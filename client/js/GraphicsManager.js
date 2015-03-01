@@ -63,11 +63,8 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         h_ratio = height/gfx_window_height;
         w_ratio = width/gfx_window_width;
         context.scale(w_ratio, h_ratio);
-        // context.translate(-context.canvas.width/w_ratio, -context.canvas.height/h_ratio); // bot right
-        // context.translate(-context.canvas.width/w_ratio, 0); // top right
-        // context.translate(0, -context.canvas.height/h_ratio); // bot left
-        // positionPlayer(0); // PICKUP
-        //
+
+        // place the window in the correct location
         player_position = getPlayerSide(player_id);
         positionPlayer(player_id);
     }
@@ -85,7 +82,9 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         drawRectangle(0, 0, pw, ph, default_background_color);
 
         // undo rotation
-        undoRot(player_position);
+        if (w_ratio <= 2 && h_ratio <= 2) {
+            undoRot(player_position);
+        }
 
         // draw all game objects
         for (var i in objects) {
@@ -99,7 +98,9 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         }
 
         // rotate the canvas into position
-        rotateDown(player_position);
+        if (w_ratio <= 2 && h_ratio <= 2) {
+            rotateDown(player_position);
+        }
 
         // draw the border and score
         this.drawBorder();
