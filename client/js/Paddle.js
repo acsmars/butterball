@@ -1,9 +1,11 @@
 /*
  * Paddle class acts as a generic "wall" object.
  */
-function paddle (x, y, width, height) {
+function paddle (color, x, y, width, height, owner) {
 	
+	this.owner = typeof owner !== 'undefined' ? owner : 0;
 	this.type = "paddle";
+	this.color = typeof color !== 'undefined' ? color: "white";
 	this.x = typeof x !== 'undefined' ? x : 0;
 	this.y = typeof y !== 'undefined' ? y : 0;
 	this.width = typeof width !== 'undefined' ? width : 0;
