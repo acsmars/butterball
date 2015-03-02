@@ -17,7 +17,10 @@
     var phys = new SimplePhysicsEngine(0);
 
     // controller1
-    var con1 = new Controller(1);
+    var con = [
+        new Controller(1, 38, 40, 37, 39),
+        new Controller(1, 87, 83, 65, 68)
+    ];
 
     // some test objects - these are the same ones that are in index.html
     var objs = [
@@ -26,7 +29,8 @@
         new wall(w - 30, 0, 30, h), // right
         new wall(0, h - 30, w, 30), // bot
         new ball('green', 50, 50, 10, 3, 3),
-        new paddle(200, 400, 70, 10)];
+        new paddle('red', 400, 400, 70, 10),
+        new paddle('blue', 200, 400, 70, 10)];
 
     // The first player will be player number 0 for code purposes
     var scores = [0, 0, 0];
@@ -38,9 +42,11 @@
     objs[2].owner = "Team3";
 
     // update loop set at one update every 10ms
+    //It would be intensive to check for every object being a paddle every step, in the future we will implement a one time function taht identifies controllers matching paddle objects
     window.setInterval(function() {
         phys.step(objs, scores, 1);
         gfx.draw(objs, scores);
-        con1.checkKey(objs[5]);
+        con[0].checkKey(objs[5]);
+        con[1].checkKey(objs[6]);
     }, 10);
 };
