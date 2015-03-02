@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.17.1.css">
+    <script src="http://code.jquery.com/qunit/qunit-1.17.1.js"></script>
+    <script src="../client/js/SimplePhysicsEngine.js"></script>
+    <script src="../client/js/Ball.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+
+
+    <script>
+    var socket = io();
+    var test = '';
+
+    QUnit.test("test push/pull example", function( assert ) {
+        	socket.emit('push msg', 'Test');
+		socket.on('push msg', function(msg){
+           		test = msg;
+           		});
+		assert.equal(test, 'Test');
+
+    });
+
+    </script>
+    </head>
+<body>
+
+<div id="qunit"></div>
+
+</body>
+</html>
