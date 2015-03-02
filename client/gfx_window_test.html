@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="js/GraphicsManager.js"></script>
+    <script type="text/javascript" src="js/SimplePhysicsEngine.js"></script>
+    <script type="text/javascript" src="js/Controller.js"></script>
+    <script type="text/javascript" src="js/Ball.js"></script>
+    <script type="text/javascript" src="js/Wall.js"></script>
+    <script type="text/javascript" src="js/Paddle.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
+</head>
+<body>
+    <div id="canvas_container"></div>
+    <div id="canvas_container2"></div>
+</body>
+<script type="text/javascript">
+    var id = 0;
+    var gfx = null;
+    var mod = 3;
+
+    gfx = new GraphicsManager(
+            document.getElementById("canvas_container"),
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight,
+            window.innerHeight,
+            id);
+
+    var phs = new SimplePhysicsEngine(null, 0);
+    var con = new Controller(document.getElementById("canvas_container"));
+    var objs = [
+        new wall(100, 100, 300, 20),
+        new wall(100, 100, 20, 300),
+        new wall(100, 380, 300, 20),
+        new wall(380, 100, 20, 300),
+        new ball('green', 200, 200, 10),
+        // new ball('green', window.innerHeight*mod/2, window.innerHeight*mod/2, window.innerHeight*mod/3),
+        new paddle(0, 0, window.innerHeight*mod/3, window.innerHeight*mod/5)];
+
+    var cont = new Controller(1);
+    var scores = [0, 0, 0];
+    gfx.draw(objs, scores);
+
+    objs[4].vx = 5;
+    objs[4].vy = 6;
+
+    window.setInterval(function() {
+        phs.step(objs, scores, 1);
+        gfx.draw(objs, scores);
+        con.checkKey(objs[5]);
+        // gfx2.draw(objs, scores);
+    }, 10);
+
+    document.addEventListener('click', function () {
+        gfx.del();
+        id = (id + 1)%(4*mod);
+        gfx = new GraphicsManager(
+            document.getElementById("canvas_container"),
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight*mod,
+            window.innerHeight,
+            window.innerHeight,
+            id,
+            1);
+    });
+</script>
+</html>
