@@ -1,0 +1,18 @@
+Game Modes
+	Co-op Versus
+	Single Player Versus
+	Elimination
+	Highest Score
+	Solo Time Trial
+
+Game Varaiants
+	Mitosis
+	Balls grow from small to large and then split.
+
+	Speed Gradient
+	Balls go from green to red over time and grow faster. After the balls turn bright red they split into two green balls.
+
+	Powers of 2
+	Balls split into two after each paddle collision.
+
+ 
