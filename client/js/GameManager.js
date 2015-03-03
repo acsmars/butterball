@@ -30,19 +30,19 @@
         new wall(0, 0, 30, w), // left
         new wall(w - 30, 0, 30, h), // right
         new wall(0, h - 30, w, 30), // bot
-        new ball('green', 50, 50, 10, 3, 3),
+        new ball('#402E27', 100, 100, 10, 3, 3),
         new paddle('blue', 40, 40, 10, 100),
         new paddle('red', w - 50, 40, 10, 100),
         new paddle('black', 350, 40, 100, 10),
-        new paddle('black', 350, h - 50, 100, 10)];
+        new paddle('green', 350, h - 50, 100, 10)];
 
     // The first player will be player number 0 for code purposes
     var scores = [0, 0, 0, 0];
 
     gfx.draw(objs, scores);
 
-    objs[0].owner = "Team1";
-    objs[1].owner = "Team2";
+    objs[0].owner = "Team2";
+    objs[1].owner = "Team1";
     objs[2].owner = "Team3";
     objs[3].owner = "Team4";
 
