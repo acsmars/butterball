@@ -18,10 +18,10 @@
 
     // controller1
     var con = [
-        new Controller(1, 82, 70, 0, 0),
-        new Controller(1, 87, 83, 0, 0),
-        new Controller(1, 0, 0, 65, 68),
-        new Controller(1, 0, 0, 65, 68)
+        new Controller(1, 87, 83, 65, 68),
+        new Controller(1, 73, 75, 74, 76),
+        new Controller(1, 38, 40, 37, 39),
+        new Controller(1, 104, 101, 100, 102)
     ];
 
     // some test objects - these are the same ones that are in index.html
@@ -31,8 +31,8 @@
         new wall(w - 30, 0, 30, h), // right
         new wall(0, h - 30, w, 30), // bot
         new ball('green', 50, 50, 10, 3, 3),
-        new paddle('red', w - 50, 40, 10, 100),
         new paddle('blue', 40, 40, 10, 100),
+        new paddle('red', w - 50, 40, 10, 100),
         new paddle('black', 350, 40, 100, 10),
         new paddle('black', 350, h - 50, 100, 10)];
 
