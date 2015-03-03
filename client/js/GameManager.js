@@ -21,7 +21,7 @@
         new Controller(1, 87, 83, 65, 68),
         new Controller(1, 73, 75, 74, 76),
         new Controller(1, 38, 40, 37, 39),
-        new Controller(1, 104, 101, 100, 102)
+        new Controller(1, 56, 53, 52, 54)
     ];
 
     // some test objects - these are the same ones that are in index.html
