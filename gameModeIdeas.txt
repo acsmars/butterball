@@ -15,4 +15,5 @@ Game Varaiants
 	Powers of 2
 	Balls split into two after each paddle collision.
 
- 
+ 	Gravity
+ 	Two player gravity applies to the ball, bottom is really bouncy.
