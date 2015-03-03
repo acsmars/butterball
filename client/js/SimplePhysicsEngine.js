@@ -236,6 +236,9 @@ var SimplePhysicsEngine = function (debug) {
                                             case "Team3":
                                                 scores[2]++;
                                                 break;
+                                            case "Team4":
+                                                scores[3]++;
+                                                break;
                                             default:
                                                 if (debug > 0) {
                                                     this.dlog("Object has unknown owner" + objects[index2].owner , "SimplePhysicsEngine");

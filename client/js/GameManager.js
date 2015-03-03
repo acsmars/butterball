@@ -18,8 +18,10 @@
 
     // controller1
     var con = [
-        new Controller(1, 38, 40, 37, 39),
-        new Controller(1, 87, 83, 65, 68)
+        new Controller(1, 82, 70, 0, 0),
+        new Controller(1, 87, 83, 0, 0),
+        new Controller(1, 0, 0, 65, 68),
+        new Controller(1, 0, 0, 65, 68)
     ];
 
     // some test objects - these are the same ones that are in index.html
@@ -29,17 +31,20 @@
         new wall(w - 30, 0, 30, h), // right
         new wall(0, h - 30, w, 30), // bot
         new ball('green', 50, 50, 10, 3, 3),
-        new paddle('red', 400, 400, 70, 10),
-        new paddle('blue', 200, 400, 70, 10)];
+        new paddle('red', w - 50, 40, 10, 100),
+        new paddle('blue', 40, 40, 10, 100),
+        new paddle('black', 350, 40, 100, 10),
+        new paddle('black', 350, h - 50, 100, 10)];
 
     // The first player will be player number 0 for code purposes
-    var scores = [0, 0, 0];
+    var scores = [0, 0, 0, 0];
 
     gfx.draw(objs, scores);
 
     objs[0].owner = "Team1";
     objs[1].owner = "Team2";
     objs[2].owner = "Team3";
+    objs[3].owner = "Team4";
 
     // update loop set at one update every 10ms
     //It would be intensive to check for every object being a paddle every step, in the future we will implement a one time function taht identifies controllers matching paddle objects
@@ -48,5 +53,7 @@
         gfx.draw(objs, scores);
         con[0].checkKey(objs[5]);
         con[1].checkKey(objs[6]);
+        con[2].checkKey(objs[7]);
+        con[3].checkKey(objs[8]);
     }, 10);
 };
