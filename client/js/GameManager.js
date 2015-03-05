@@ -14,7 +14,7 @@
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h, w, h, 2, 1);
 
     // physics engine
-    var phys = new SimplePhysicsEngine(0);
+    var phys = new SimplePhysicsEngine(w, h, 0);
 
     // controller1
     var con = [

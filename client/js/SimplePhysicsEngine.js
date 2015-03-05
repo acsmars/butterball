@@ -2,7 +2,7 @@
  * SimplePhysicsEngine creates, initializes, and manages a non-raycast enabled
  * physics engine for ButterBall.
  */
-var SimplePhysicsEngine = function (debug) {
+var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
     
     // Determines number of degrees of accuracy when colliding ball
     // (Number of points to check around perimiter when colliding)
@@ -11,8 +11,10 @@ var SimplePhysicsEngine = function (debug) {
     var ballRadSteps = 32;
     
     //TODO: replace gameManager instance with message handler?
-    function init(managerObject, debug) {
+    function init(physWidth, physHeight, debug) {
         debug = (typeof debug == 'number' ? debug : 0);
+        physWidth = (typeof physWidth == 'number' ? physWidth : 1000);
+        physHeight = (typeof physHeight == 'number' ? physHeight : 1000);
     }
     
     /**
@@ -290,13 +292,7 @@ var SimplePhysicsEngine = function (debug) {
                                         newObjects[index].x += Math.sign(newObjects[index].vx) * Math.abs(adjustment) * 2;
                                         newObjects[index].y += Math.sign(newObjects[index].vy) * Math.abs(adjustment) * 2;
                                     }
-                                    
-                                    // Check for outside playing field
-                                    // TODO: Pass playing field size in
-                                    if (newObjects[index].x < 0 || newObjects[index].x > 1000 || newObjects[index].y < 0 || newObjects[index].y > 1000) {
-                                        newObjects[index].x = 500;
-                                        newObjects[index].y = 500;
-                                    }
+
                                 }
                             break;
                             
@@ -356,6 +352,7 @@ var SimplePhysicsEngine = function (debug) {
                 break;
             }
         }
+        
         // Copy new elements back into passed-in array
         // Have do do by index because JavaScript is dumb when handling array references >:(
         for (index = 0, len = objects.length; index < len; ++index) {
@@ -363,8 +360,13 @@ var SimplePhysicsEngine = function (debug) {
             // Limit velocities 
             if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 6) { newObjects[index].vx = 6 }
             if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 6) { newObjects[index].vy = 6 }
+            // Check for outside playing field
+            if (newObjects[index].type == "ball" && (newObjects[index].x < 0 || newObjects[index].x > physWidth || newObjects[index].y < 0 || newObjects[index].y > physHeight)) {
+                newObjects[index].x = physWidth / 2;
+                newObjects[index].y = physHeight / 2;
+            }
         }
     };
 
-    init(debug);
+    init(physWidth, physHeight, debug);
 };
