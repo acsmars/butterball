@@ -96,6 +96,7 @@ var SimplePhysicsEngine = function (debug) {
         
      }.bind(this);
      
+     // Create array of points and angles around a circle for collision detection purposes
      var makeRadiusPoints = function(ball, ballRadSteps, radiusPoints) {
         for (var i = 0; i < ballRadSteps; i++) {
             radiusPoints[i*4] = ball.x + (ball.r) * Math.cos(2*Math.PI * i/ballRadSteps);
@@ -260,14 +261,41 @@ var SimplePhysicsEngine = function (debug) {
                                     if(objects[index2].hasOwnProperty("vx") && objects[index2].hasOwnProperty("vy")) {
                                         newObjects[index].vx += objects[index2].vx * Math.abs(Math.cos(angle));
                                         newObjects[index].vy += objects[index2].vy * Math.abs(Math.sin(angle));
-                                    }
+                                    }                
                                     
                                     // Move ball until collision is no longer happening
-                                    makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
-                                    while (radiusCheckCollision(radiusPoints, objects[index2])) {
-                                        newObjects[index].x += newObjects[index].vx * time;
-                                        newObjects[index].y += newObjects[index].vy * time;
+                                    // Use binary search to place ball close to edge of the object
+
+                                    // Largest adjustment to postion to make
+                                    var adjustment = 8;
+                                    for (var i = 0; i < 10; i++) {
+                                        newObjects[index].x += Math.sign(newObjects[index].vx) * adjustment;
+                                        newObjects[index].y += Math.sign(newObjects[index].vy) * adjustment;
+                                        
                                         makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
+                                        
+                                        if (radiusCheckCollision(radiusPoints, objects[index2])) {
+                                            //Colliding, move further away
+                                            adjustment = Math.abs(adjustment);
+                                        }
+                                        else {
+                                            //Not colliding, move closer
+                                            adjustment = adjustment / 2;
+                                            adjustment = -1 * Math.abs(adjustment);
+                                        }
+                                    }
+                                    
+                                    if (radiusCheckCollision(radiusPoints, objects[index2])) {
+                                        //Colliding, undo last adjustment
+                                        newObjects[index].x += Math.sign(newObjects[index].vx) * Math.abs(adjustment) * 2;
+                                        newObjects[index].y += Math.sign(newObjects[index].vy) * Math.abs(adjustment) * 2;
+                                    }
+                                    
+                                    // Check for outside playing field
+                                    // TODO: Pass playing field size in
+                                    if (newObjects[index].x < 0 || newObjects[index].x > 1000 || newObjects[index].y < 0 || newObjects[index].y > 1000) {
+                                        newObjects[index].x = 500;
+                                        newObjects[index].y = 500;
                                     }
                                 }
                             break;
@@ -287,7 +315,9 @@ var SimplePhysicsEngine = function (debug) {
                     
                     // More for loops. Hooray!
                     for (index2 = 0, len2 = objects.length; index2 < len2; ++index2) {
-                        paddleWallCollisions(collisions, objects[index], objects[index2])
+                        if ((index != index2) && (objects[index2].type == "wall")) {
+                            paddleWallCollisions(collisions, objects[index], objects[index2])
+                        }
                     }
                     
                     // Check top collision
@@ -331,8 +361,8 @@ var SimplePhysicsEngine = function (debug) {
         for (index = 0, len = objects.length; index < len; ++index) {
             objects[index] = newObjects[index];
             // Limit velocities 
-            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 5) { newObjects[index].vx = 5 }
-            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 5) { newObjects[index].vy = 5 }
+            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 6) { newObjects[index].vx = 6 }
+            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 6) { newObjects[index].vy = 6 }
         }
     };
 
