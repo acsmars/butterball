@@ -32,6 +32,15 @@
         new paddle('red', 400, 400, 70, 10),
         new paddle('blue', 200, 400, 70, 10)];
 
+    //Creat teams and assign scores, controllers, and goals (owners)
+    var teams = [
+        new team("Team 1"),
+        new team("Team 2")
+    ];
+
+    teams[0].addController(con[0]);
+    teams[0].addGoal(objs[3]);
+
     // The first player will be player number 0 for code purposes
     var scores = [0, 0, 0];
 
