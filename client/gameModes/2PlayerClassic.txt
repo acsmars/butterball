@@ -18,8 +18,7 @@ Goals are defined by their
 
 [main]
 balls=1
-humanPlayers=2
-aiPlayers=0
+
 fieldX=500
 fieldY=500
 localX=500
@@ -27,8 +26,8 @@ localY=500
 
 [teams]
 teams=2
-team0Player={0}
-team1Player={1}
+team0Controller={0}
+team1Controller={1}
 
 team0Goal={0}
 team1Goal={2}

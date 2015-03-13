@@ -168,7 +168,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
      * @param  {Array} objects Array of objects that affect/effect physics simulation
      * @param  {Int} time Amount of time in ticks that will pass in this next step
      */
-    this.step = function (objects, scores, time) {
+    this.step = function (objects, team, time) {
         // Iterate through objects and determine future positions
         // will need to be improved for odd shapes/momentums in future
         var index, len;
@@ -227,26 +227,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                         this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
                                     }
                                     
-                                    //Check if object has owner
-                                    if (objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null) {
-                                        switch (objects[index2].owner) {
-                                            case "Team1":
-                                                scores[0]++;
-                                                break;
-                                            case "Team2":
-                                                scores[1]++;
-                                                break;
-                                            case "Team3":
-                                                scores[2]++;
-                                                break;
-                                            default:
-                                                if (debug > 0) {
-                                                    this.dlog("Object has unknown owner" + objects[index2].owner , "SimplePhysicsEngine");
-                                                }
-                                        }
-                                        if (debug > 0) {
-                                            this.dlog("Object has owner" + objects[index2].owner , "SimplePhysicsEngine");
-                                        }
+                                    //Check if object has owner increment score by the objects value if it does
+                                    if(objects[index2].value > 0 && objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null && objects[index2].owner < team.length) {
+                                        team[objects[index2].owner].incrementScore(objects[index2].value);
                                     }
                                     
                                     // Determine angle of incidence
