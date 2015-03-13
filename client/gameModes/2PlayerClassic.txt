@@ -1,0 +1,34 @@
+Everything before the main section is considered a comment and ignored.
+
+Each player gets a controller. Controllers will be initialized with default controls for the first four controllers, and blank controls after that.
+In release it will be possible to rebound controls anyway.
+
+Main includes generic game information. If no other spcifications about balls and paddles are made defaults should be used for the number of objects specified in paddle.
+(i.e. Paddles centered on left and right walls and the ball in the center with a random (or predefined velocity))
+Field refers to the total size of the arena.
+Local refers to the locally visible section, this obviously doesn't do anything yet.
+Walls should be constructed to bound the field area similarly to how they are now in the gameManager.
+
+Teams includes information about each team to be created and what they control.
+Players are numbered, starting at 0, human players first. (i.e. {0 (human), 1 (human), 2 (ai), 3 (ai)}  )
+A co-op team might look like:
+	team1Player={0,1}
+Goals are defined by their 
+
+
+[main]
+balls=1
+
+fieldX=500
+fieldY=500
+localX=500
+localY=500
+
+[teams]
+teams=2
+team0Controller={0}
+team1Controller={1}
+
+team0Goal={0}
+team1Goal={2}
+
