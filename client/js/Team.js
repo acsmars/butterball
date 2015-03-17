@@ -1,5 +1,6 @@
 /*
 Team manages a team's controllers, goals (and their ownership), and score
+number is the teams numerical identifier
 */
 var Team = function(name,number) {
     function init(name,number) {

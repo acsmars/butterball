@@ -18,8 +18,8 @@
 
     // controller1
     var con = [
-        new Controller(1, 38, 40, 37, 39),
-        new Controller(1, 87, 83, 65, 68)
+        new Controller(1, 87, 83, 65, 68),
+        new Controller(1, 38, 40, 37, 39)
     ];
 
     // some test objects - these are the same ones that are in index.html
@@ -38,20 +38,20 @@
     //Creat teams and assign scores, controllers, and goals (owners)
     var team = [
         new Team("Team 1",0),
-        new Team("Team 2",1),
-        new Team("Team 3",2),
-        new Team("Team 4",3)
+        new Team("Team 2",1)
+        //new Team("Team 3",2),
+        //new Team("Team 4",3)
     ];
 
     team[0].addController(con[0]);
     team[0].addGoal(objs[0]);
 
-    team[1].addGoal(objs[1]);
+    //team[1].addGoal(objs[1]);
 
-    team[2].addController(con[1]);
-    team[2].addGoal(objs[2]);
+    team[1].addController(con[1]);
+    team[1].addGoal(objs[2]);
 
-    team[3].addGoal(objs[3]);
+    //team[3].addGoal(objs[3]);
 
     //gfx.draw(objs, scores); //What does this do in the current version?
 
