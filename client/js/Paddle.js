@@ -4,6 +4,7 @@
 function paddle (color, x, y, width, height, owner) {
 	
 	this.owner = typeof owner !== 'undefined' ? owner : 0;
+	this.value = typeof value !== 'undefined' ? value : 0;
 	this.type = "paddle";
 	this.color = typeof color !== 'undefined' ? color: "white";
 	this.x = typeof x !== 'undefined' ? x : 0;

@@ -18,34 +18,48 @@
 
     // controller1
     var con = [
-        new Controller(1, 38, 40, 37, 39),
-        new Controller(1, 87, 83, 65, 68)
+        new Controller(1, 87, 83, 65, 68),
+        new Controller(1, 38, 40, 37, 39)
     ];
 
     // some test objects - these are the same ones that are in index.html
     var objs = [
-        new wall(0, 0, h, 30), // top
-        new wall(0, 0, 30, w), // left
-        new wall(w - 30, 0, 30, h), // right
-        new wall(0, h - 30, w, 30), // bot
-        new ball('green', 50, 50, 10, 3, 3),
-        new paddle('red', 400, 400, 70, 10),
-        new paddle('blue', 200, 400, 70, 10)];
+        new wall(0, 0, 30, w,1), // left
+        new wall(0, 0, h, 30,1), // top
+        new wall(w - 30, 0, 30, h,1), // right
+        new wall(0, h - 30, w, 30,1), // bot
+        new ball('#402E27', 100, 100, 10, 4, 3),
+        new paddle('blue', 40, 40, 10, 100),
+        new paddle('red', w - 50, 40, 10, 100)
+        //new paddle('black', 350, 40, 100, 10),
+        //new paddle('green', 350, h - 50, 100, 10)
+    ];
 
-    // The first player will be player number 0 for code purposes
-    var scores = [0, 0, 0];
+    //Creat teams and assign scores, controllers, and goals (owners)
+    var team = [
+        new Team("Team 1",0),
+        new Team("Team 2",1)
+        //new Team("Team 3",2),
+        //new Team("Team 4",3)
+    ];
 
-    gfx.draw(objs, scores);
+    team[0].addController(con[0]);
+    team[0].addGoal(objs[0]);
 
-    objs[0].owner = "Team1";
-    objs[1].owner = "Team2";
-    objs[2].owner = "Team3";
+    //team[1].addGoal(objs[1]);
+
+    team[1].addController(con[1]);
+    team[1].addGoal(objs[2]);
+
+    //team[3].addGoal(objs[3]);
+
+    //gfx.draw(objs, scores); //What does this do in the current version?
 
     // update loop set at one update every 10ms
     //It would be intensive to check for every object being a paddle every step, in the future we will implement a one time function taht identifies controllers matching paddle objects
     window.setInterval(function() {
-        phys.step(objs, scores, 1);
-        gfx.draw(objs, scores);
+        phys.step(objs, team, 1);
+        gfx.draw(objs, team);
         con[0].checkKey(objs[5]);
         con[1].checkKey(objs[6]);
     }, 10);

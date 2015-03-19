@@ -74,7 +74,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
      * @param  {Array} objects The object to draw on the screen
      * @param {Array} score An array of score for the current game with team 1's score first, and so on
      */
-    this.draw = function (objects, score) {
+    this.draw = function (objects, team) {
         // clear the canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -104,7 +104,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
 
         // draw the border and score
         this.drawBorder();
-        this.drawScore(score);
+        this.drawScore(team);
 
     };
 
@@ -148,14 +148,14 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
     /**
      * Draw the score over the border of the playing field
      */
-    this.drawScore = function (score) {
+    this.drawScore = function (team) {
         context.fillStyle = this.score_color;
         context.font = "bold " + scaleX(border_width)*0.75 + "px Arial";
         context.textAlign = 'left';
         context.textBaseline = 'middle';
 
-        for (var i =0; i<score.length; i++) {
-            context.fillText("Team " + (i + 1) + ": " + score[i], scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
+        for (var i =0; i<team.length; i++) {
+            context.fillText(team[i].getName() + ": " + team[i].getScore(), scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
         }
     };
 

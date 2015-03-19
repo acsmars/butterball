@@ -168,7 +168,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
      * @param  {Array} objects Array of objects that affect/effect physics simulation
      * @param  {Int} time Amount of time in ticks that will pass in this next step
      */
-    this.step = function (objects, scores, time) {
+    this.step = function (objects, team, time) {
         // Iterate through objects and determine future positions
         // will need to be improved for odd shapes/momentums in future
         var index, len;
@@ -203,6 +203,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
             
             switch (objects[index].type) {
                 case "ball":
+                    var isBallReset = false;
                     for (index2 = 0, len2 = objects.length; index2 < len2; ++index2) {
                         
                         // Objects don't collide with selves
@@ -225,28 +226,6 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                 
                                     if (debug > 0) {
                                         this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
-                                    }
-                                    
-                                    //Check if object has owner
-                                    if (objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null) {
-                                        switch (objects[index2].owner) {
-                                            case "Team1":
-                                                scores[0]++;
-                                                break;
-                                            case "Team2":
-                                                scores[1]++;
-                                                break;
-                                            case "Team3":
-                                                scores[2]++;
-                                                break;
-                                            default:
-                                                if (debug > 0) {
-                                                    this.dlog("Object has unknown owner" + objects[index2].owner , "SimplePhysicsEngine");
-                                                }
-                                        }
-                                        if (debug > 0) {
-                                            this.dlog("Object has owner" + objects[index2].owner , "SimplePhysicsEngine");
-                                        }
                                     }
                                     
                                     // Determine angle of incidence
@@ -293,6 +272,12 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                         newObjects[index].y += Math.sign(newObjects[index].vy) * Math.abs(adjustment) * 2;
                                     }
 
+                                    //Check if object has owner increment score by the objects value if it does
+                                    if(objects[index2].value > 0 && objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null && objects[index2].owner < team.length) {
+                                        team[objects[index2].owner].incrementScore(objects[index2].value);
+                                        isBallReset = true;
+                                    }
+
                                 }
                             break;
                             
@@ -303,6 +288,16 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                 break;
                         }
                     }
+                    if(isBallReset) {
+                        //Reset Ball
+                        newObjects[index].vx = getRandomVelocity();
+                        newObjects[index].vy = getRandomVelocity();
+                        if(newObjects[index].vx > 0) {newObjects[index].x = physWidth / 4;}
+                        else {newObjects[index].x = physWidth * 3 / 4;}
+                        if(newObjects[index].vy > 0) {newObjects[index].y = physHeight / 4;}
+                        else {newObjects[index].y = physHeight * 3 / 4;}
+
+                    };
                     break;
                 
                 case "paddle":
@@ -369,4 +364,10 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
     };
 
     init(physWidth, physHeight, debug);
+};
+
+function getRandomVelocity() {
+  var num = Math.floor(Math.random() * (5 - 2)) + 2;
+  if(Math.random() < 0.5) num = num * -1;
+  return num;
 };
