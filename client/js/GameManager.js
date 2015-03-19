@@ -28,9 +28,11 @@
         new wall(0, 0, h, 30,1), // top
         new wall(w - 30, 0, 30, h,1), // right
         new wall(0, h - 30, w, 30,1), // bot
-        new ball('#402E27', 100, 100, 10, 4, 3),
         new paddle('blue', 40, 40, 10, 100),
-        new paddle('red', w - 50, 40, 10, 100)
+        new paddle('red', w - 50, 40, 10, 100),
+        new ball('#402E27', 100, 100, 10, 2, 2, 0, 0, 0.005),
+        new ball('#402E27', 200, 100, 10, 2, 2, 0, 0.1),
+        new ball('#402E27', 300, 100, 10, 2, 2, 0, 0.1)
         //new paddle('black', 350, 40, 100, 10),
         //new paddle('green', 350, h - 50, 100, 10)
     ];
@@ -60,7 +62,7 @@
     window.setInterval(function() {
         phys.step(objs, team, 1);
         gfx.draw(objs, team);
-        con[0].checkKey(objs[5]);
-        con[1].checkKey(objs[6]);
+        con[0].checkKey(objs[4]);
+        con[1].checkKey(objs[5]);
     }, 10);
 };

@@ -273,7 +273,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                     }
 
                                     //Check if object has owner increment score by the objects value if it does
-                                    if(objects[index2].value > 0 && objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null && objects[index2].owner < team.length) {
+                                    if(objects[index2].value != 0 && objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null && objects[index2].owner < team.length) {
                                         team[objects[index2].owner].incrementScore(objects[index2].value);
                                         isBallReset = true;
                                     }
@@ -287,6 +287,10 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
                                 }
                                 break;
                         }
+                    }
+                    if(newObjects[index].ax != 1 || newObjects[index].ay != 1) {//If either ball ay or ball ax is not one, do ball acceleration
+                        newObjects[index].vx += newObjects[index].ax + (Math.sign(newObjects[index].vx) * newObjects[index].a);
+                        newObjects[index].vy += newObjects[index].ay + (Math.sign(newObjects[index].vy) * newObjects[index].a);
                     }
                     if(isBallReset) {
                         //Reset Ball
@@ -353,8 +357,8 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
         for (index = 0, len = objects.length; index < len; ++index) {
             objects[index] = newObjects[index];
             // Limit velocities 
-            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 6) { newObjects[index].vx = 6 }
-            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 6) { newObjects[index].vy = 6 }
+            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 10) { newObjects[index].vx = 10 }
+            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 10) { newObjects[index].vy = 10 }
             // Check for outside playing field
             if (newObjects[index].type == "ball" && (newObjects[index].x < 0 || newObjects[index].x > physWidth || newObjects[index].y < 0 || newObjects[index].y > physHeight)) {
                 newObjects[index].x = physWidth / 2;
