@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 //Serve HTTP requests and append console log.
 app.get('*' ,function(req, res){
 	  res.sendFile(__dirname + req.url);
-	  console.log(__dirname + req.url + ': Served to client.');
+	  //console.log(__dirname + req.url + ': Served to client.');
 });
 
 //Initiate socket daemon
@@ -14,18 +14,10 @@ io.on('connection', function(socket) {
 	//Report TCP connection in console log.
 	console.log('TCP Connection Established:', socket.request.connection._peername);
 	
-	//Push connection notification to all connected clients.    
-	io.emit('debug msg', socket.request.connection._peername.address);
-	
 	//Report debug msg in console log.
-	socket.on('debug msg', function(msg){
-	    console.log(msg);
-	      });
-
-	socket.on('push msg', function(msg){
-		io.emit('push msg', msg + socket.request.connection._peername.address);
-		});
-
+	socket.on('tickEvent', function(tickPkg){
+	    console.log(tickPkg);
+	    });
 });
 
 //Listen for connections and request on port 8080
