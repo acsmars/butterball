@@ -14,7 +14,7 @@
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h, w, h, 2, 1);
 
     // physics engine
-    var phys = new SimplePhysicsEngine(w, h, 0);
+    var phys = new SimplePhysicsEngine(w, h, 20, 0);
 
     // controller1
     var con = [
@@ -28,11 +28,11 @@
         new wall(0, 0, h, 30,1), // top
         new wall(w - 30, 0, 30, h,1), // right
         new wall(0, h - 30, w, 30,1), // bot
-        new paddle('blue', 40, 40, 10, 100),
-        new paddle('red', w - 50, 40, 10, 100),
-        new ball('#402E27', 100, 100, 10, 2, 2, 0, 0, 0.005),
-        new ball('#402E27', 200, 100, 10, 2, 2, 0, 0.1),
-        new ball('#402E27', 300, 100, 10, 2, 2, 0, 0.1)
+        new paddle('black', 40, 40, 10, 100),
+        new paddle('black', w - 50, 40, 10, 100),
+        new ball('blue', 100, 100, 10, 2, 2, 0, 0, 0.005),
+        new ball('green', 200, 100, 10, 2, 2, 0, 0.1),
+        new ball('red', 300, 100, 10, 2, 2, 0, 0.1)
         //new paddle('black', 350, 40, 100, 10),
         //new paddle('green', 350, h - 50, 100, 10)
     ];
@@ -46,12 +46,12 @@
     ];
 
     team[0].addController(con[0]);
-    team[0].addGoal(objs[0]);
+    //team[0].addGoal(objs[0]);
 
     //team[1].addGoal(objs[1]);
 
     team[1].addController(con[1]);
-    team[1].addGoal(objs[2]);
+    //team[1].addGoal(objs[2]);
 
     //team[3].addGoal(objs[3]);
 
@@ -64,5 +64,5 @@
         gfx.draw(objs, team);
         con[0].checkKey(objs[4]);
         con[1].checkKey(objs[5]);
-    }, 10);
+    }, 8);
 };

@@ -2,7 +2,7 @@
  * SimplePhysicsEngine creates, initializes, and manages a non-raycast enabled
  * physics engine for ButterBall.
  */
-var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
+var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
     
     // Determines number of degrees of accuracy when colliding ball
     // (Number of points to check around perimiter when colliding)
@@ -357,8 +357,8 @@ var SimplePhysicsEngine = function (physWidth, physHeight, debug) {
         for (index = 0, len = objects.length; index < len; ++index) {
             objects[index] = newObjects[index];
             // Limit velocities 
-            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > 10) { newObjects[index].vx = 10 }
-            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > 10) { newObjects[index].vy = 10 }
+            if (newObjects[index].hasOwnProperty("vx") && newObjects[index].vx > maxSpeed) { newObjects[index].vx = maxSpeed }
+            if (newObjects[index].hasOwnProperty("vy") && newObjects[index].vy > maxSpeed) { newObjects[index].vy = maxSpeed }
             // Check for outside playing field
             if (newObjects[index].type == "ball" && (newObjects[index].x < 0 || newObjects[index].x > physWidth || newObjects[index].y < 0 || newObjects[index].y > physHeight)) {
                 newObjects[index].x = physWidth / 2;
