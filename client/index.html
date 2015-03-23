@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<style>
+	body {
+		overflow:hidden;
+		background-color:#E8BF6C;
+	}
+	h1 {
+		font-family:Calibri;
+		font-size:48pt;
+	}
+	a {
+		display:block;
+	}
+	img {
+		padding:10px;
+	}
+	#centerMain {
+		margin:0 auto 0;
+		width:500px;
+		text-align:center;
+	}
+</style>
 </head>
-<body style="overflow:hidden;" bgcolor="#E8BF6C">
-	<div style="position: absolute; left: 50%">
-		<h1 style="margin-left:-57%; font-size:48pt; font-family:Calibri; margin-top:25%">Butterball</h1>
-		<div style="height:70px"></div>
-		<form action="game.html">
-			<input type="image" src="images/SinglePlayer.png" name="Single Player" alt="Submit" style="margin-left:-50%; padding-bottom:10px">
-		</form>
-		<form action="">
-			<input type="image" src="images/MultiPlayer.png" name="Single Player" alt="Submit" style="margin-left:-50%; padding-bottom:10px">
-		</form>
-		<form action="">
-			<input type="image" src="images/Controls.png" name="Single Player" alt="Submit" style="margin-left:-50%">
-		</form>
+<body>
+	<div id="centerMain">
+		<h1>Butterball</h1>
+		<a href="game.html"><img src="images/SinglePlayer.png" alt="Single Player"></a>
+		<a href=""><img src="images/MultiPlayer.png" alt="Multi Player"></a>
+		<a href=""><img src="images/Controls.png" alt="Controls"></a>
 	</div>
 </body>
 </html>
