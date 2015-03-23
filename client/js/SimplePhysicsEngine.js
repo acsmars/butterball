@@ -34,7 +34,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
      * @param {Object} testObject Object to test collisions with
      * @return {Bool} Returns whether any collision happened
      */
-     var radiusCheckCollision = function (radiusPoints, testObject) {
+     var radiusCheckWallCollision = function (radiusPoints, testObject) {
      
         var total = radiusPoints.length
         var collision = false;
@@ -46,6 +46,34 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             (radiusPoints[i] <= testObject.x + testObject.width) &&
             (radiusPoints[i+1] >= testObject.y) &&
             (radiusPoints[i+1] <= testObject.y + testObject.height)) {
+                radiusPoints[i+2] = true;
+                collision = true;
+                if (debug > 2) {
+                    this.dlog("Radius at point " + radiusPoints[i] + "," + radiusPoints[i+1] + " collided.", "SimplePhysicsEngine")
+                }
+            }
+            
+        } 
+        return collision;
+     }.bind(this);
+     
+     /**
+     * Check if radius points are inside an area defined by a ball, and update array accordingly
+     * @param {Array} radiusPoints Array in the format (float x, float y, bool collision, float angle), ...
+     * @param {Object} testObject Object to test collisions with
+     * @return {Bool} Returns whether any collision happened
+     */
+     var radiusCheckBallCollision = function (radiusPoints, testObject) {
+     
+        var total = radiusPoints.length
+        var collision = false;
+        
+        for (i = 0; i < total; i += 4) {
+            radiusPoints[i+2] = false;
+        
+            //Check if collision point is within testObject radius
+            if (Math.sqrt(Math.pow(radiusPoints[i] - testObject.x, 2) + 
+                Math.pow(radiusPoints[i+1] - testObject.y, 2)) <= testObject.r) {
                 radiusPoints[i+2] = true;
                 collision = true;
                 if (debug > 2) {
@@ -215,70 +243,18 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                         var radiusPoints = [];
                         makeRadiusPoints(objects[index], ballRadSteps, radiusPoints);
                         
-                        // Check type of object
+                        // Check type of object to determine collision function
+                        collisionFunction = null;
+                        
                         switch (objects[index2].type) {
                         
                             case "paddle":
                             case "wall":
-                                // Check if ball inside wall bounds
-                                // Note: radiusCheckCollision modifies radiusPoints to show where collisions occurred.
-                                if (radiusCheckCollision(radiusPoints, objects[index2])) {
-                                
-                                    if (debug > 0) {
-                                        this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
-                                    }
-                                    
-                                    // Determine angle of incidence
-                                    var angle = findAngleOfIncidence(radiusPoints);
-                                    
-                                    //Find dot product of velocity and n (normal vector to angle of incidence
-                                    var dotProduct = objects[index].vx * Math.cos(angle) + objects[index].vy * Math.sin(angle);
-                                    
-                                    // Determine new velocities
-                                    // Standard reflection velocity
-                                    newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle);
-                                    newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
-                                    // If object collided with has velocity, determine how ball velocity affected.
-                                    if(objects[index2].hasOwnProperty("vx") && objects[index2].hasOwnProperty("vy")) {
-                                        newObjects[index].vx += objects[index2].vx * Math.abs(Math.cos(angle));
-                                        newObjects[index].vy += objects[index2].vy * Math.abs(Math.sin(angle));
-                                    }                
-                                    
-                                    // Move ball until collision is no longer happening
-                                    // Use binary search to place ball close to edge of the object
-
-                                    // Largest adjustment to postion to make
-                                    var adjustment = 8;
-                                    for (var i = 0; i < 10; i++) {
-                                        newObjects[index].x += Math.sign(newObjects[index].vx) * adjustment;
-                                        newObjects[index].y += Math.sign(newObjects[index].vy) * adjustment;
-                                        
-                                        makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
-                                        
-                                        if (radiusCheckCollision(radiusPoints, objects[index2])) {
-                                            //Colliding, move further away
-                                            adjustment = Math.abs(adjustment);
-                                        }
-                                        else {
-                                            //Not colliding, move closer
-                                            adjustment = adjustment / 2;
-                                            adjustment = -1 * Math.abs(adjustment);
-                                        }
-                                    }
-                                    
-                                    if (radiusCheckCollision(radiusPoints, objects[index2])) {
-                                        //Colliding, undo last adjustment
-                                        newObjects[index].x += Math.sign(newObjects[index].vx) * Math.abs(adjustment) * 2;
-                                        newObjects[index].y += Math.sign(newObjects[index].vy) * Math.abs(adjustment) * 2;
-                                    }
-
-                                    //Check if object has owner increment score by the objects value if it does
-                                    if(objects[index2].value != 0 && objects[index2].hasOwnProperty("owner") && objects[index2].owner !== null && objects[index2].owner < team.length) {
-                                        team[objects[index2].owner].incrementScore(objects[index2].value);
-                                        isBallReset = true;
-                                    }
-
-                                }
+                                collisionFunction = radiusCheckWallCollision;
+                            break;
+                            
+                            case "ball":
+                                collisionFunction = radiusCheckBallCollision;
                             break;
                             
                             default:
@@ -287,11 +263,94 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                                 }
                                 break;
                         }
+                        
+                        // Check if ball colliding
+                        // Note: collision functions modify radiusPoints to show where collisions occurred.
+                        if (collisionFunction(radiusPoints, objects[index2])) {
+                        
+                            if (debug > 0) {
+                                this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
+                            }
+                            
+                            // Determine angle of incidence
+                            var angle = findAngleOfIncidence(radiusPoints);
+                            
+                            //Find dot product of velocity and n (normal vector to angle of incidence
+                            var dotProduct = objects[index].vx * Math.cos(angle) + objects[index].vy * Math.sin(angle);
+                            
+                            // Determine new velocities
+                            // If object collided with has velocity, determine how ball velocity affected. 
+                            if(objects[index2].type == "paddle") { //Reflect + velocity transfer
+                                newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle) + objects[index2].vx * Math.cos(angle);
+                                newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle) + objects[index2].vy * Math.sin(angle);
+                            }
+                            else if (objects[index2].type == "ball") { //Momentum transfer
+                                //Need dot product of other ball
+                                var dotProduct2 = objects[index2].vx * Math.cos(angle) + objects[index2].vy * Math.sin(angle);
+                                newObjects[index].vx += (dotProduct2 - dotProduct) * Math.cos(angle);
+                                newObjects[index].vy += (dotProduct2 - dotProduct) * Math.sin(angle);
+                            }
+                            else { //Reflect only
+                                newObjects[index].vx = objects[index].vx - 2 * dotProduct * Math.cos(angle);
+                                newObjects[index].vy = objects[index].vy - 2 * dotProduct * Math.sin(angle);
+                            }                
+                            
+                            makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
+                            
+                            if (collisionFunction(radiusPoints, objects[index2])) {
+                                // Move ball until collision is no longer happening
+                                // Use binary search to place ball close to edge of the object
+
+                                // Largest adjustment to postion to make
+                                var adjustment = 8;
+                                var xdirection = Math.sign(newObjects[index].vx);
+                                var ydirection = Math.sign(newObjects[index].vy);
+                                
+                                for (var i = 0; i < 10; i++) {
+                                    newObjects[index].x += xdirection * adjustment;
+                                    newObjects[index].y += ydirection * adjustment;
+                                    
+                                    makeRadiusPoints(newObjects[index], ballRadSteps, radiusPoints);
+                                    
+                                    if (collisionFunction(radiusPoints, objects[index2])) {
+                                        //Colliding, move further away (Original direction of new velocity)
+                                        xdirection = Math.sign(newObjects[index].vx);
+                                        ydirection = Math.sign(newObjects[index].vy);
+                                    }
+                                    else {
+                                        //Not colliding, move closer (Opposite direction of new velocity)
+                                        adjustment = adjustment / 2;
+                                        xdirection = -1 * Math.sign(newObjects[index].vx);
+                                        ydirection = -1 * Math.sign(newObjects[index].vy);
+                                    }
+                                }
+                                
+                                if (collisionFunction(radiusPoints, objects[index2])) {
+                                    //Colliding, undo last adjustment
+                                    xdirection = Math.sign(newObjects[index].vx);
+                                    ydirection = Math.sign(newObjects[index].vy);
+                                    newObjects[index].x += xdirection * adjustment;
+                                    newObjects[index].y += ydirection * adjustment;
+                                }
+                            }
+                            
+                            //Check if object has owner; increment score by the objects value if it does
+                            if( objects[index2].value != 0 && objects[index2].hasOwnProperty("owner") &&
+                                objects[index2].owner !== null && objects[index2].owner < team.length) {
+                                
+                                team[objects[index2].owner].incrementScore(objects[index2].value);
+                                isBallReset = true;
+                            }
+
+                        }
+
                     }
+                    
                     if(newObjects[index].ax != 1 || newObjects[index].ay != 1) {//If either ball ay or ball ax is not one, do ball acceleration
                         newObjects[index].vx += newObjects[index].ax + (Math.sign(newObjects[index].vx) * newObjects[index].a);
                         newObjects[index].vy += newObjects[index].ay + (Math.sign(newObjects[index].vy) * newObjects[index].a);
                     }
+                    
                     if(isBallReset) {
                         //Reset Ball
                         newObjects[index].vx = getRandomVelocity();
