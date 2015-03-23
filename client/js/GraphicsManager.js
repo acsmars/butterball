@@ -89,7 +89,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         // draw all game objects
         for (var i in objects) {
             if (objects[i].type == "wall") {
-                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, default_wall_color);
+                drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, objects[i].color);
             } else if (objects[i].type == "ball") {
                 drawCircle(objects[i].x, objects[i].y, objects[i].r, objects[i].color);
             } else if (objects[i].type == "paddle") {
