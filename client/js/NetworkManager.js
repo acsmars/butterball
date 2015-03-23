@@ -1,11 +1,10 @@
 var socket = io();
 
-socket.on('tickBroadcast', function(msg){
-	$('#pushLog').append($('<li>').text(msg));
+/**
+ * Pushes the statePackage via socket to server as a JSON.
+ * @Param {string} Stringified JSON state package to be passed to server
+ */
+var pushState = function (statePackage) {
+	socket.emit('tickEvent', statePackage);
 	});
-
-$(document).ready(function(){
-	$('#push').click(function(){
-		socket.emit('tickEvent', 'JSON STRING HERE');
-		});
 });
