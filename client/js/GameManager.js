@@ -13,7 +13,7 @@
     var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h, w, h, 2, 1);
 
     // physics engine
-    var phys = new SimplePhysicsEngine(w, h, 20, 0);
+    var phys = new SimplePhysicsEngine(w, h, 10, 0);
 
     // controller1
     var con = [
@@ -54,7 +54,6 @@
 
     //team[3].addGoal(objs[3]);
 
-    //gfx.draw(objs, scores);
 
     // update loop set at one update every 10ms
     //It would be intensive to check for every object being a paddle every step, in the future we will implement a one time function taht identifies controllers matching paddle objects
