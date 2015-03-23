@@ -4,8 +4,7 @@
     and gameplay (score, win/lose, power-ups, etc.)
  */
 
- // Do we need params for this? Are we creating the objects in the GameManager or just
- // passing them by reference from index.html to each of the scripts?
+ 
  var GameManager = function()
  {
     // graphics manager
@@ -55,7 +54,7 @@
 
     //team[3].addGoal(objs[3]);
 
-    //gfx.draw(objs, scores); //What does this do in the current version?
+    //gfx.draw(objs, scores);
 
     // update loop set at one update every 10ms
     //It would be intensive to check for every object being a paddle every step, in the future we will implement a one time function taht identifies controllers matching paddle objects
