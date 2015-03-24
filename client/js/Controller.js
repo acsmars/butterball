@@ -48,13 +48,13 @@ var Controller = function (id,upKey,downKey,leftKey,rightKey) {
         //Later versions will have settings for which paddle is bound to which keys
         
         if (keys[up] && keys[down]) paddle.vy = 0;
-        else if (keys[up]) paddle.vy = -5;
-        else if (keys[down]) paddle.vy = 5;
+        else if (keys[up]) paddle.vy = -6;
+        else if (keys[down]) paddle.vy = 6;
         else paddle.vy = 0;
         
         if (keys[left] && keys[right]) paddle.vx = 0;
-        else if (keys[left]) paddle.vx = -5;
-        else if (keys[right]) paddle.vx = 5;
+        else if (keys[left]) paddle.vx = -6;
+        else if (keys[right]) paddle.vx = 6;
         else paddle.vx = 0;
 
     };
