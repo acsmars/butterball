@@ -1,0 +1,45 @@
+body {
+	overflow: hidden;
+	background-color: #E8BF6C;
+}
+h1 {
+	color: #402E27;
+	font-family: Calibri;
+	font-size: 48pt;
+	text-align: center;
+}
+#centerMain {
+	margin:0 auto 0;	
+}
+#mainMenu {
+	position:absolute;
+	right:10px;
+	top:10px;
+}
+.button {
+	display:block;
+	color: #402E27;
+	font-family: Calibri;
+	text-align:center;
+	text-decoration:none;
+	background-color: #F2DEA0;
+	border: 3px solid #402E27;
+}
+.button:hover {
+	background-color: #B59461;
+}
+.medium {
+	margin: 0 auto 20px;
+	width: 240px;
+	height: 40px;
+	padding: 30px 0 30px;
+	font-size: 24pt;
+}
+.small {
+	margin: 0 auto 10px;
+	width: 180px;
+	height: 35px;
+	padding: 20px 0 20px;
+	font-size: 20pt;
+
+}
