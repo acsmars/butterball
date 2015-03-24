@@ -23,10 +23,10 @@
 
     // some test objects - these are the same ones that are in index.html
     var objs = [
-        new wall(0, 0, 30, w,1), // left
-        new wall(0, 0, h, 30,1), // top
-        new wall(w - 30, 0, 30, h,1), // right
-        new wall(0, h - 30, w, 30,1), // bot
+        new wall("red", 0, 0, 30, w,1), // left
+        new wall("green", 0, 0, h, 30,1), // top
+        new wall("blue", w - 30, 0, 30, h,1), // right
+        new wall("yellow", 0, h - 30, w, 30,1), // bot
         new paddle('black', 40, 40, 10, 100),
         new paddle('black', w - 50, 40, 10, 100),
         new ball('blue', 100, 100, 10, 2, 2, 0, 0, 0.005),
