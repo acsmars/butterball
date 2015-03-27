@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="js/QuadTree.js"></script>
+    <script type="text/javascript" src="js/Ball.js"></script>
+    <script type="text/javascript" src="js/Wall.js"></script>
+    <script type="text/javascript" src="js/Paddle.js"></script>
+    <script type="text/javascript" src="js/GraphicsManager.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/main.css"></link>
+</head>
+
+<body>
+   <div id="centerMain">
+        <div id="canvas_container"></div>
+        <a class="small button" id="mainMenu" href="index.html">Main Menu</a>
+    </div>
+</body>
+
+<script type="text/javascript">
+   var objectTree = new QuadTree(1000, 1000, 1);
+   objectTree.addObject(new ball('blue', 100, 100, 10, 2, 2, 0, 0, 0.01))
+   objectTree.addObject(new ball('red', 200, 200, 10, 2, 2, 0, 0, 0.01))
+   objectTree.addObject(new ball('green', 300, 300, 10, 2, 2, 0, 0, 0.01))
+   objectTree.printTree(0);
+   var w = window.innerHeight;
+   var h = window.innerHeight;
+   var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h, w, h, 2, 1);
+   gfx.draw(objectTree.exportObjectList(0), null);
+</script>
+</html>

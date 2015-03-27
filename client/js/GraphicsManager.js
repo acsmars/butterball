@@ -104,7 +104,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
 
         // draw the border and score
         this.drawBorder();
-        this.drawScore(team);
+        //this.drawScore(team);
 
     };
 
