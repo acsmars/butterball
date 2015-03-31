@@ -71,7 +71,8 @@ var GameManager = function()
 
     function victory() {
         if (team.length === 1) {
-            alert("Victory! " + team[0].name + " is the winner!");
+            alert(team[0].name + " is the winner!");
+            window.location.href = "index.html";
         }
     }
 
