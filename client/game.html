@@ -19,14 +19,17 @@
 <body>
     <div id="centerMain">
         <div id="canvas_container"></div>
-	<ul id="pushLog"><li>test</li></ul>
+	<ul id="pushLog"></ul>
         <a class="small button" id="mainMenu" href="index.html">Main Menu</a>
     </div>
 </body>
 <script>
    var GM = new GameManager();
    var socket = io();
-    socket.on('statePush', function(tickPkg){
+   var UUID = generateUUID();		
+   $('#pushLog').append($('<li>').text('UUID: ' + UUID));
+
+   socket.on('statePush', function(tickPkg){
 	    $('#pushLog').append($('<li>').text(tickPkg));
 	    });
 
