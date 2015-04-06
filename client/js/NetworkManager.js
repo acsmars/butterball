@@ -6,6 +6,10 @@ function pushState (statePackage) {
 	socket.emit('tickEvent', statePackage);
 	}
 
+/**
+ * Generates UUID and returns as string.
+ */
+
 function generateUUID() {
 	var d = new Date().getTime();
 	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, 
