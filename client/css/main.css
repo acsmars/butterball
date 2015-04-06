@@ -43,3 +43,11 @@ h1 {
 	font-size: 20pt;
 
 }
+#pushLog{
+	position: absolute;
+	left: 725px;
+	top: 10px;
+	width: 30%;
+	overflow: hidden;
+}
+

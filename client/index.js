@@ -3,7 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 //Serve HTTP requests and append console log.
-app.get('*' ,function(req, res){
+server.get('*' ,function(req, res){
 	  res.sendFile(__dirname + req.url);
 	  //console.log(__dirname + req.url + ': Served to client.');
 });
@@ -17,6 +17,8 @@ io.on('connection', function(socket) {
 	//Report debug msg in console log.
 	socket.on('tickEvent', function(tickPkg){
 	    console.log(tickPkg);
+	    io.emit('statePush', tickPkg);
+	    console.log('Push');
 	    });
 });
 

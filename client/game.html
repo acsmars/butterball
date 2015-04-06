@@ -10,20 +10,25 @@
     <script type="text/javascript" src="js/GameManager.js"></script>
     <script type="text/javascript" src="js/Team.js"></script>
     <script type="text/javascript" src="js/NetworkManager.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
     <link rel="stylesheet" type="text/css" href="css/main.css"></link>
 </head>
 <body>
     <div id="centerMain">
         <div id="canvas_container"></div>
+	<ul id="pushLog"><li>test</li></ul>
         <a class="small button" id="mainMenu" href="index.html">Main Menu</a>
     </div>
 </body>
-<script type="text/javascript">
+<script>
    var GM = new GameManager();
    var socket = io();
+    socket.on('statePush', function(tickPkg){
+	    $('#pushLog').append($('<li>').text(tickPkg));
+	    });
+
 </script>
 </html>
