@@ -30,7 +30,8 @@
    $('#pushLog').append($('<li>').text('UUID: ' + UUID));
 
    socket.on('statePush', function(tickPkg){
-	    $('#pushLog').append($('<li>').text(tickPkg));
+	    var tickData = "Owner: " + JSON.parse(tickPkg).owner + " X: " + JSON.parse(tickPkg).x + " Y: " + JSON.parse(tickPkg).y;
+	    $('#pushLog').append($('<li>').text(tickData));
 	    });
 
 </script>
