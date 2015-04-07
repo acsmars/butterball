@@ -4,7 +4,7 @@ Controller which listens for key input and controls
 UP, DOWN, LEFT, RIGHT: 38,40,37,39
 WASD: 87, 83, 65, 68
 */
-var Controller = function (id, upKey, downKey, leftKey, rightKey) {
+var Controller = function (id, objs, upKey, downKey, leftKey, rightKey) {
     // paddle Controller
     this.init = function () {};
 
@@ -44,9 +44,10 @@ var Controller = function (id, upKey, downKey, leftKey, rightKey) {
     };
 
 
-    this.checkKey = function (paddle) {
+    this.checkKey = function () {
         //Finds a paddle objecat and applies adjustments from input keys to its position
         //Later versions will have settings for which paddle is bound to which keys
+        paddle = objs[controllerID];
 
         if (keys[up] && keys[down]) paddle.vy = 0;
         else if (keys[up]) paddle.vy = -6;

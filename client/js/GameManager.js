@@ -28,14 +28,14 @@ var GameManager = function()
 
     // controller1
     var con = [
-        new Controller(1, 87, 83, 65, 68),
-        new Controller(1, 38, 40, 37, 39)
+        new Controller(4, objs, 87, 83, 65, 68),
+        new Controller(5, objs, 38, 40, 37, 39)
     ];
 
     //Creat teams and assign scores, controllers, and goals (owners)
     var team = [
-        new Team("Team 1", 0, this, 10),
-        new Team("Team 2", 1, this, 10)
+        new Team("Team 1", 0, this, 100),
+        new Team("Team 2", 1, this, 100)
     ];
 
     team[0].addController(con[0]);
@@ -94,7 +94,7 @@ var GameManager = function()
     window.setInterval(function() {
         phys.step(objs, team, 1);
         gfx.draw(objs, team);
-        con[0].checkKey(objs[4]);
-        con[1].checkKey(objs[5]);
+        con[0].checkKey();
+        con[1].checkKey();
     }, 8);
 };
