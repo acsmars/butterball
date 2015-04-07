@@ -40,8 +40,18 @@ h1 {
 	width: 180px;
 	height: 35px;
 	padding: 20px 0 20px;
-	font-size: 20pt;
-
+	font-size: 16pt;
+}
+.tiny {
+	display: inline;
+	width: 160px;
+	height: 24px;
+	padding: 10px 5px;
+	float: right;
+	margin-left: 10%;
+	margin-top: -8px;
+	font-size: 16pt;
+	vertical-align: top;
 }
 #pushLog{
 	position: absolute;
@@ -50,4 +60,22 @@ h1 {
 	width: 30%;
 	overflow: hidden;
 }
-
+#controlCenterDiv{
+	height: 400px;
+	width: 800px;
+	margin: auto;
+}
+.controlDiv {
+	height: 80px;
+}
+.controlDiv h2{
+	width: 180px;
+	display: inline;
+	vertical-align: top;
+	margin-top: 16px;
+}
+#controlsBackButton{
+	position:absolute;
+	margin-left: -14%;
+	margin-top: 25%;
+}
