@@ -4,6 +4,7 @@
 function ball (color, x, y, r, vx, vy, ax, ay, a) {
 
 	this.type = "ball";
+    this.destroyed = false;
 	this.color = typeof color !== 'undefined' ? color: "white";
 	this.x = typeof x !== 'undefined' ? x : 0;
 	this.y = typeof y !== 'undefined' ? y : 0;

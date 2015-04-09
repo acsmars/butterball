@@ -4,6 +4,7 @@
 function wall (color, x, y, width, height,value) {
 	
 	this.type = "wall";
+	this.destroyed = false;
 	this.color = (color !== '' && color !== "default") ? color: "#8C6542";
 	this.x = typeof x !== 'undefined' ? x : 0;
 	this.y = typeof y !== 'undefined' ? y : 0;
