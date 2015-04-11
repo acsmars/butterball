@@ -88,6 +88,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
 
         // draw all game objects
         for (var i in objects) {
+            if(objects[i].destroyed) {continue;}
             if (objects[i].type == "wall") {
                 drawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, objects[i].color);
             } else if (objects[i].type == "ball") {
@@ -155,7 +156,7 @@ var GraphicsManager = function (canvas_container, width, height, phys_width, phy
         context.textBaseline = 'middle';
 
         for (var i =0; i<team.length; i++) {
-            context.fillText(team[i].getName() + ": " + team[i].getScore(), scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
+            context.fillText(team[i].name + ": " + team[i].lives, scaleX(border_width)*1.1 + scaleX(border_width)*(5*i), scaleX(border_width)/2);
         }
     };
 

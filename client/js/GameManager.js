@@ -32,46 +32,26 @@ var GameManager = function()
         new Controller(5, objs, 38, 40, 37, 39)
     ];
 
-    //Creat teams and assign scores, controllers, and goals (owners)
+    //Create teams and assign scores, controllers, and goals (owners)
     var team = [
-        new Team("Team 1", 0, this, 100),
-        new Team("Team 2", 1, this, 100)
+        new Team("Team 1", 0, this, 5),
+        new Team("Team 2", 1, this, 5)
     ];
 
-    team[0].addController(con[0]);
     team[0].addGoal(objs[0]);
 
-    team[1].addController(con[1]);
     team[1].addGoal(objs[2]);
 
-    this.teamEliminated = function (number) {
-        index = -1;
+    this.victory = function() {
+        var winningTeamNumber, remainingTeams = 0;
         for (var i=0; i<team.length; i++) {
-            console.log(team[i].number);
-            console.log(number);
-            if (team[i].number == number) {
-                index = i;
+            if(!team[i].defeated) {
+                remainingTeams++;
+                winningTeamNumber = i;
             }
         }
-
-        if (index == -1) {
-            throw "Unable to find team with number " + number.toString();
-        }
-
-        var goals = team[index].getGoals();
-        var controllers = team[index].getControllers();
-        for (var g in goals) {
-            objs.remove(g);
-        }
-
-        team.splice(index, 1);
-
-        victory();
-    };
-
-    function victory() {
-        if (team.length === 1) {
-            alert(team[0].name + " is the winner!");
+        if (remainingTeams === 1) {
+            alert(team[winningTeamNumber].name + " is the winner!");
             window.location.href = "index.html";
         }
     }

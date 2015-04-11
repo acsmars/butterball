@@ -48,6 +48,7 @@ var Controller = function (id, objs, upKey, downKey, leftKey, rightKey) {
         //Finds a paddle objecat and applies adjustments from input keys to its position
         //Later versions will have settings for which paddle is bound to which keys
         paddle = objs[controllerID];
+        if(paddle.destroyed) return;
 
         if (keys[up] && keys[down]) paddle.vy = 0;
         else if (keys[up]) paddle.vy = -6;

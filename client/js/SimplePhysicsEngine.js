@@ -229,10 +229,20 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 this.dlog("Object " + String(index) + " started iteration at [" + String(objects[index].x) + "," + String(objects[index].y) + "]", "SimplePhysicsEngine");
             }
 
+            if(objects[index].destroyed) {
+                if(debug > 0) this.dlog("Skipping Destroyed Object");
+                continue;
+            };
+
             switch (objects[index].type) {
                 case "ball":
                     var isBallReset = false;
                     for (index2 = 0, len2 = objects.length; index2 < len2; ++index2) {
+
+                        //Skipped Destroyed Objects
+                        if(objects[index2].destroyed) {
+                            continue;
+                        }
 
                         // Objects don't collide with selves
                         if (index == index2) {
@@ -334,11 +344,11 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                                 }
                             }
 
-                            //Check if object has owner; increment score by the objects value if it does
+                            //Check if object has owner; decrement lives by the objects value if it does
                             if( objects[index2].value != 0 && objects[index2].hasOwnProperty("owner") &&
                                 objects[index2].owner !== null && objects[index2].owner < team.length) {
 
-                                team[objects[index2].owner].incrementScore(-objects[index2].value);
+                                team[objects[index2].owner].decrementLives(objects[index2].value);
                                 isBallReset = true;
                             }
 
