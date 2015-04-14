@@ -426,15 +426,15 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             }
 
             // Finally, send JSON-encoded paddle object for this client's paddle
-            //TODO: Function in tickService.js is currently private, or I don't know how to reference it correctly.
-            //TODO: How are teams assigned on a per-client basis?
-            var myTeam = 0 // For testing purposes
-            for (i = 0; i < team.length; i++) {
+            //TODO: Implement real UUIDs.
+            // For now, UUID = index of paddle to send to server (4 and 5)
+            /*for (i = 0; i < team.length; i++) {
                 if (objects[index].type == "paddle" && objects[index].hasOwnProperty("owner") &&
                     objects[index].owner !== null && objects[index].owner == myTeam) {
                     pushState(JSON.stringify(objects[index]));
                 }
-            }
+            }*/
+            pushState(JSON.stringify(objects[UUID]));
         }
 
     };
