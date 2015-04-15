@@ -434,6 +434,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                     pushState(JSON.stringify(objects[index]));
                 }
             }*/
+            //alert(JSON.stringify([UUID, objects[UUID]]));
             pushState(JSON.stringify([UUID, objects[UUID]]));
         }
 
