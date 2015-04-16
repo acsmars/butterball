@@ -28,13 +28,7 @@ io.on('connection', function(socket) {
 	    var paddle = JSON.parse(tickPkg)[1]
 	    var id = JSON.parse(tickPkg)[0]
 
-	    if(id == 4){
-	    	stateCache[0] = paddle;
-	    }
-	    if(id == 5){
-	    	stateCache[1] = paddle;
-	    }
-	    });
+	    stateCache[id] = paddle;
 
 	setInterval(function () {
 		io.emit('statePush', JSON.stringify(stateCache));
