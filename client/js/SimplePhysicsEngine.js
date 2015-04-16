@@ -211,6 +211,10 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
+            if (objects[index].type == "paddle" && uuid != index) {
+                //Update opposite paddle with cache values
+                objects[index] = stateCache[index];
+            }
         }
 
         // Create clone destination array for holding new attributes
