@@ -211,6 +211,11 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
+            if (stateCache[index] !== null && objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
+                //Update opposite paddle with cache values
+                console.log("Physics: ", objects[index], " Cache: ", stateCache[index]);
+		objects[index] = stateCache[index];
+            }
         }
 
         // Create clone destination array for holding new attributes
@@ -266,7 +271,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
                         // Check if ball colliding
                         // Note: collision functions modify radiusPoints to show where collisions occurred.
-                        if (collisionFunction(radiusPoints, objects[index2])) {
+                        var value = collisionFunction(radiusPoints, objects[index2])
+
+			if (value) {
 
                             if (debug > 0) {
                                 this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
@@ -426,15 +433,16 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             }
 
             // Finally, send JSON-encoded paddle object for this client's paddle
-            //TODO: Function in tickService.js is currently private, or I don't know how to reference it correctly.
-            //TODO: How are teams assigned on a per-client basis?
-            var myTeam = 0 // For testing purposes
-            for (i = 0; i < team.length; i++) {
+            //TODO: Implement real UUIDs.
+            // For now, UUID = index of paddle to send to server (4 and 5)
+            /*for (i = 0; i < team.length; i++) {
                 if (objects[index].type == "paddle" && objects[index].hasOwnProperty("owner") &&
                     objects[index].owner !== null && objects[index].owner == myTeam) {
                     pushState(JSON.stringify(objects[index]));
                 }
-            }
+            }*/
+            //alert(JSON.stringify([UUID, objects[UUID]]));
+            pushState(JSON.stringify([UUID, objects[UUID]]));
         }
 
     };

@@ -96,5 +96,5 @@ var GameManager = function()
         gfx.draw(objs, team);
         con[0].checkKey();
         con[1].checkKey();
-    }, 8);
+    }, 500);
 };
