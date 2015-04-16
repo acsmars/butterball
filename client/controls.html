@@ -1,21 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="css/main.css"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script>
+	function initializeControls()
+	{
+		var cookie = getControlsCookie('left');
+		alert(cookie);
+		if(cookie=="")
+		{
+			createControlsCookie('left',37);
+		}
+		cookie = getControlsCookie('right');
+		alert(cookie);
+		if(cookie=="")
+		{
+			createControlsCookie('right',39);
+		}
+		cookie = getControlsCookie('up');
+		if(cookie=="")
+		{
+			createControlsCookie('up',38);
+		}
+		cookie = getControlsCookie('down');
+		if(cookie=="")
+		{
+			createControlsCookie('down',40);
+		}
+	}
+	function loadCurrentControls()
+	{
+		var buttons = ['right','left','up','down'];
+		for(var i=0;i<buttons.length;i++)
+		{
+			var cookie = getControlsCookie(buttons[i]);
+			//alert((cookie.split("=")));
+			$('#'+buttons[i]).text(String.fromCharCode(cookie.split("=")[1]));
+		}
+		//alert("Worked!");
+	}
+	function setControls(action)
+	{
+		$(document).keydown(function(key)
+		{
+			var code = key.keyCode;
+			//alert(code); 
+			createControlsCookie(action,code);
+			$(document).unbind('keydown');
+		});
+		loadCurrentControls();
+	}
+	function getControlsCookie(action)
+	{
+		var cookie = document.cookie.split(';');
+		for (var i=0; i<cookie.length; i++)
+		{
+			var iter = cookie[i];
+			while(iter.charAt(0)==' ')
+			{
+				iter = iter.substring(1);
+				if (iter.indexOf(action) == 0)
+				{
+					return iter.substring(name.length,iter.length);
+				}
+			}
+		}
+		return "";
+		//get a cookie using the given name
+	}
+	function createControlsCookie(action,code)
+	{
+		//this is the number of days that the cookie will be kept before expiring
+		//the second part of the math statement converts the days to milliseconds
+		var expiration = 100 * (24*60*60*1000);
+		//create a new cookie for the controls
+		var tempDate = new Date();
+		tempDate.setTime(tempDate.getTime() + expiration);
+		var exp = '; expires=' + tempDate.toUTCString();
+		document.cookie = action + '=' + code + exp + '; path=/';
+		//alert("Done!");
+	}
+	</script>
+	<link rel="stylesheet" type="text/css" href="css/main.css"></link>
 </head>
 <body>
+	<script>
+		initializeControls();
+	</script>
 	<div id="centerMain">
 		<h1>Controls</h1>
 		<div ID="controlCenterDiv">
 			<div style="height:40px; width: 100%"><h3 style="margin-left:80%">Click to Change</h3><div>
-			<div class="controlDiv"><h2>Move paddle left</h2><a class="tiny button" href="">Left Arrow Key</a></div>
-			<div class="controlDiv"><h2>Move paddle right</h2><a class="tiny button" href="">Right Arrow Key</a></div>
-			<div class="controlDiv"><h2>Move paddle up</h2><a class="tiny button" href="">Up Arrow Key</a></div>
-			<div class="controlDiv"><h2>Move paddle down</h2><a class="tiny button" href="">Down Arrow Key</a></div>
+			<div class="controlDiv"><h2>Move paddle left</h2><a ID="left" class="tiny button" onclick="setControls('left')"></a></div>
+			<div class="controlDiv"><h2>Move paddle right</h2><a ID="right" class="tiny button" onclick="setControls('right')"></a></div>
+			<div class="controlDiv"><h2>Move paddle up</h2><a ID="up" class="tiny button" onclick="setControls('up')"></a></div>
+			<div class="controlDiv"><h2>Move paddle down</h2><a ID="down" class="tiny button" onclick="setControls('down')"></a></div>
 		</div>
 	</div>
 	<div ID="controlsBackButton">
 		<a class="small button" href="index.html"><- Back</a>
 	</div>
+	<script>
+		loadCurrentControls();
+	</script>
 </body>
 </html>
