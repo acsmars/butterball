@@ -3,6 +3,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 //Serve HTTP requests and append console log.
+app.get('/game.html' ,function(req, res){
+	var id = req.param('id');
+	res.sendFile(__dirname + '/game.html')
+});
+
 app.get('*' ,function(req, res){
 	  res.sendFile(__dirname + req.url);
 	  //console.log(__dirname + req.url + ': Served to client.');
