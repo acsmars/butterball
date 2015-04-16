@@ -6,13 +6,11 @@
 	function initializeControls()
 	{
 		var cookie = getControlsCookie('left');
-		alert(cookie);
 		if(cookie=="")
 		{
 			createControlsCookie('left',37);
 		}
 		cookie = getControlsCookie('right');
-		alert(cookie);
 		if(cookie=="")
 		{
 			createControlsCookie('right',39);
@@ -34,21 +32,19 @@
 		for(var i=0;i<buttons.length;i++)
 		{
 			var cookie = getControlsCookie(buttons[i]);
-			//alert((cookie.split("=")));
 			$('#'+buttons[i]).text(String.fromCharCode(cookie.split("=")[1]));
 		}
-		//alert("Worked!");
 	}
 	function setControls(action)
 	{
 		$(document).keydown(function(key)
 		{
 			var code = key.keyCode;
-			//alert(code); 
 			createControlsCookie(action,code);
+			loadCurrentControls();
 			$(document).unbind('keydown');
 		});
-		loadCurrentControls();
+		
 	}
 	function getControlsCookie(action)
 	{
@@ -78,7 +74,6 @@
 		tempDate.setTime(tempDate.getTime() + expiration);
 		var exp = '; expires=' + tempDate.toUTCString();
 		document.cookie = action + '=' + code + exp + '; path=/';
-		//alert("Done!");
 	}
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/main.css"></link>
