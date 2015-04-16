@@ -12,7 +12,6 @@
     <script type="text/javascript" src="js/NetworkManager.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
     <link rel="stylesheet" type="text/css" href="css/main.css"></link>
 </head>
@@ -33,11 +32,8 @@
     UUID = generateUUID();
   }
    		
-   $('#pushLog').append($('<li>').text('UUID: ' + UUID));
-
    socket.on('statePush', function(tickPkg){
 	    stateCache = tickPkg
-	    $('#pushLog').append($('<li>').text(stateCache));
 	    });
 	    
   function get(name){

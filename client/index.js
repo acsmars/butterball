@@ -25,17 +25,17 @@ io.on('connection', function(socket) {
 	    //console.log(tickPkg);
 	    //io.emit('statePush', tickPkg);
 	    //console.log('Push');
-	    var paddle = JSON.parse(tickPkg)[1]
-	    var id = JSON.parse(tickPkg)[0]
+	    var paddle = JSON.parse(tickPkg)[1];
+	    var id = JSON.parse(tickPkg)[0];
 
 	    stateCache[id] = paddle;
 
 	setInterval(function () {
-		io.emit('statePush', JSON.stringify(stateCache));
+		io.emit('statePush', stateCache);
 		console.log(stateCache);		
-		}, 100);
+		}, 500);
 });
-
+	});
 
 //Listen for connections and request on port 8080
 http.listen(8080, function(){

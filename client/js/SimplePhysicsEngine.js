@@ -213,7 +213,8 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             }
             if (objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
                 //Update opposite paddle with cache values
-                objects[index] = stateCache[index];
+                console.log("Physics: ", objects[index], " Cache: ", stateCache[index]);
+		objects[index] = stateCache[index];
             }
         }
 
@@ -270,7 +271,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
                         // Check if ball colliding
                         // Note: collision functions modify radiusPoints to show where collisions occurred.
-                        if (collisionFunction(radiusPoints, objects[index2])) {
+                        var value = collisionFunction(radiusPoints, objects[index2])
+
+			if (value) {
 
                             if (debug > 0) {
                                 this.dlog("Ball object " + String(index) + " collided with object " + String(index2), "SimplePhysicsEngine");
