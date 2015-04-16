@@ -27,7 +27,8 @@
   var GM = new GameManager();
   var socket = io();
   var UUID = get("id");
-  
+  var stateCache = []
+
   if(UUID == undefined) {
     UUID = generateUUID();
   }
@@ -35,8 +36,8 @@
    $('#pushLog').append($('<li>').text('UUID: ' + UUID));
 
    socket.on('statePush', function(tickPkg){
-	    var tickData = "Owner: " + JSON.parse(tickPkg).owner + " X: " + JSON.parse(tickPkg).x + " Y: " + JSON.parse(tickPkg).y;
-	    $('#pushLog').append($('<li>').text(tickData));
+	    stateCache = tickPkg
+	    $('#pushLog').append($('<li>').text(stateCache));
 	    });
 	    
   function get(name){
