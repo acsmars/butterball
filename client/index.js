@@ -33,7 +33,7 @@ io.on('connection', function(socket) {
 	setInterval(function () {
 		io.emit('statePush', stateCache);
 		console.log(stateCache);		
-		}, 500);
+		}, 1000);
 });
 	});
 

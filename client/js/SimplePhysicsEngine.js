@@ -211,7 +211,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
-            if (objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
+            if (stateCache[index] !== null && objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
                 //Update opposite paddle with cache values
                 console.log("Physics: ", objects[index], " Cache: ", stateCache[index]);
 		objects[index] = stateCache[index];

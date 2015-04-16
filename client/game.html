@@ -28,10 +28,6 @@
   var UUID = get("id");
   var stateCache = []
 
-  if(UUID == undefined) {
-    UUID = generateUUID();
-  }
-   		
    socket.on('statePush', function(tickPkg){
 	    stateCache = tickPkg
 	    });
