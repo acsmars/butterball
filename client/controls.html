@@ -32,7 +32,27 @@
 		for(var i=0;i<buttons.length;i++)
 		{
 			var cookie = getControlsCookie(buttons[i]);
-			$('#'+buttons[i]).text(String.fromCharCode(cookie.split("=")[1]));
+			var keyText = (cookie.split("=")[1])
+			if (keyText == 37)
+			{
+				$('#'+buttons[i]).text("Left Arrow Key");
+			}
+			else if (keyText == 38)
+			{
+				$('#'+buttons[i]).text("Up Arrow Key");
+			}
+			else if (keyText == 39)
+			{
+				$('#'+buttons[i]).text("Right Arrow Key");
+			}
+			else if (keyText == 40)
+			{
+				$('#'+buttons[i]).text("Down Arrow Key");
+			}
+			else
+			{
+				$('#'+buttons[i]).text(String.fromCharCode(keyText));
+			}
 		}
 	}
 	function setControls(action)
@@ -46,6 +66,7 @@
 		});
 		
 	}
+	//get a cookie using the given name
 	function getControlsCookie(action)
 	{
 		var cookie = document.cookie.split(';');
@@ -62,7 +83,6 @@
 			}
 		}
 		return "";
-		//get a cookie using the given name
 	}
 	function createControlsCookie(action,code)
 	{
