@@ -9,6 +9,13 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
     // May need to be adjusted depending on load
     // Reccomend 8
     var ballRadSteps = 32;
+    
+    // Prevent flooding network by waiting for messagePer cycles
+    // before sending next message to server
+    // Time between messages can be determined like so:
+    // milliseconds = physicsInterval * messagePer
+    var messagePer = 8;
+    var count = 0;
 
     //TODO: replace gameManager instance with message handler?
     function init(physWidth, physHeight, debug) {
@@ -442,7 +449,16 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 }
             }*/
             //alert(JSON.stringify([UUID, objects[UUID]]));
-            pushState(JSON.stringify([UUID, objects[UUID]]));
+            
+            //Count for messagePer cycles before sending messages
+            //Prevents issues with flooding the server and causing a crash
+            if (count >= messagePer) {
+              pushState(JSON.stringify([UUID, objects[UUID]]));
+              count = 0;
+            }
+            else {
+              count++;
+            }
         }
 
     };
