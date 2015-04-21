@@ -3,8 +3,27 @@
     physics (passed through the SimplePhysicsEngine, graphics (using functions from GraphicsManager.js),
     and gameplay (score, win/lose, power-ups, etc.)
  */
+//get a cookie using the given name
+function getControlsCookie(action)
+{
+	var cookie = document.cookie.split(';');
+	for (var i=0; i<cookie.length; i++)
+	{
+		var iter = cookie[i];
+		while(iter.charAt(0)==' ')
+		{
+			iter = iter.substring(1);
+			if (iter.indexOf(action) == 0)
+			{
+				return iter.substring(name.length,iter.length);
+			}
+		}
+	}
+	return "";
+}
 var GameManager = function()
 {
+	
     // graphics manager
     var w = window.innerHeight;
     var h = window.innerHeight;
@@ -12,6 +31,12 @@ var GameManager = function()
 
     // physics engine
     var phys = new SimplePhysicsEngine(w, h, 10, 0);
+	
+	// load in the user's preferred keys from the cookies
+	var leftKey = parseInt(getControlsCookie('left').split("=")[1]);
+	var rightKey = parseInt(getControlsCookie('right').split("=")[1]);
+	var upKey = parseInt(getControlsCookie('up').split("=")[1]);
+	var downKey = parseInt(getControlsCookie('down').split("=")[1]);
 
     // some test objects - these are the same ones that are in index.html
     var objs = [
@@ -28,14 +53,14 @@ var GameManager = function()
 
     // controller1
     var con = [
-        new Controller(1, 87, 83, 65, 68),
-        new Controller(1, 38, 40, 37, 39)
+        new Controller(4, objs, upKey, downKey, leftKey, rightKey),
+        new Controller(5, objs, 38, 40, 37, 39)
     ];
 
     //Creat teams and assign scores, controllers, and goals (owners)
     var team = [
-        new Team("Team 1", 0, this, 10),
-        new Team("Team 2", 1, this, 10)
+        new Team("Team 1", 0, this, 100),
+        new Team("Team 2", 1, this, 100)
     ];
 
     team[0].addController(con[0]);
@@ -94,7 +119,7 @@ var GameManager = function()
     window.setInterval(function() {
         phys.step(objs, team, 1);
         gfx.draw(objs, team);
-        con[0].checkKey(objs[4]);
-        con[1].checkKey(objs[5]);
-    }, 8);
+        con[0].checkKey();
+        con[1].checkKey();
+    }, 500);
 };

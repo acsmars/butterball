@@ -12,7 +12,6 @@
     <script type="text/javascript" src="js/NetworkManager.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
     <link rel="stylesheet" type="text/css" href="css/main.css"></link>
 </head>
@@ -24,15 +23,19 @@
     </div>
 </body>
 <script>
-   var GM = new GameManager();
-   var socket = io();
-   var UUID = generateUUID();		
-   $('#pushLog').append($('<li>').text('UUID: ' + UUID));
+  var GM = new GameManager();
+  var socket = io();
+  var UUID = get("id");
+  var stateCache = []
 
    socket.on('statePush', function(tickPkg){
-	    var tickData = "Owner: " + JSON.parse(tickPkg).owner + " X: " + JSON.parse(tickPkg).x + " Y: " + JSON.parse(tickPkg).y;
-	    $('#pushLog').append($('<li>').text(tickData));
+	    stateCache = tickPkg
 	    });
+	    
+  function get(name){
+    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+  }
 
 </script>
 </html>
