@@ -8,19 +8,19 @@ var GameManager = function()
     // graphics manager
     var w = window.innerHeight;
     var h = window.innerHeight;
-    var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, w, h, w, h, 2, 1);
+    var gfx = new GraphicsManager(document.getElementById("canvas_container"), w, h, 1000, 1000, w, h, 2, 1);
 
     // physics engine
-    var phys = new SimplePhysicsEngine(w, h, 10, 0);
+    var phys = new SimplePhysicsEngine(1000, 1000, 10, 0);
 
     // some test objects - these are the same ones that are in index.html
     var objs = [
-        new wall("red", 0, 0, 30, w,1), // left
-        new wall("green", 0, 0, h, 30,1), // top
-        new wall("blue", w - 30, 0, 30, h,1), // right
-        new wall("yellow", 0, h - 30, w, 30,1), // bot
+        new wall("red", 0, 0, 30, 1000,1), // left
+        new wall("green", 0, 0, 1000, 30,1), // top
+        new wall("blue", 1000 - 30, 0, 30, h,1), // right
+        new wall("yellow", 0, 1000 - 30, 1000, 30,1), // bot
         new paddle('black', 40, 40, 15, 120),
-        new paddle('black', w - 50, 40, 15, 120),
+        new paddle('black', 1000 - 50, 40, 15, 120),
         new ball('blue', 100, 100, 10, 2, 2, 0, 0, 0.01),
         new ball('green', 200, 100, 10, 2, 2, 0, 0.1),
         new ball('red', 300, 100, 10, 2, 2, 0, -0.1)
@@ -96,5 +96,5 @@ var GameManager = function()
         gfx.draw(objs, team);
         con[0].checkKey();
         con[1].checkKey();
-    }, 500);
+    }, 33);
 };

@@ -3,6 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var stateCache = []
+
 //Serve HTTP requests and append console log.
 app.get('/game.html' ,function(req, res){
 	var id = req.param('id');
@@ -27,9 +28,15 @@ io.on('connection', function(socket) {
 	    //console.log('Push');
 	    var paddle = JSON.parse(tickPkg)[1];
 	    var id = JSON.parse(tickPkg)[0];
-
+	    	    
 	    stateCache[id] = paddle;
-
+	    
+	    for(var i=2; i<=4; i++){
+	    	if(JSON.parse(tickPkg)[i] !== 'null'){
+			stateCache[i+4] = JSON.parse(tickPkg)[i];
+		}
+	    }
+	    
 	setInterval(function () {
 		io.emit('statePush', stateCache);
 		console.log(stateCache);		

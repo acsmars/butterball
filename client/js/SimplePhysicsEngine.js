@@ -14,7 +14,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
     // before sending next message to server
     // Time between messages can be determined like so:
     // milliseconds = physicsInterval * messagePer
-    var messagePer = 8;
+    var messagePer = 20;
     var count = 0;
 
     //TODO: replace gameManager instance with message handler?
@@ -215,6 +215,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             // Determine new positions
             // Done here so that new positions are copied to second array
             if (objects[index].type == "ball") {
+		if (stateCache[index] && stateCache[index].hasOwnProperty('owner') && stateCache[index].owner !== UUID) {
+			objects[index] = stateCache[index];
+		}
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
@@ -356,6 +359,10 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                                 isBallReset = true;
                             }
 
+			    //Update owner on collision with paddle
+			    if(newObjects[index2].type == "paddle" && index2 == UUID) {
+				newObjects[index].owner = UUID;
+			    }
                         }
 
                     }
@@ -453,7 +460,12 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             //Count for messagePer cycles before sending messages
             //Prevents issues with flooding the server and causing a crash
             if (count >= messagePer) {
-              pushState(JSON.stringify([UUID, objects[UUID]]));
+	      message = [UUID, objects[UUID]];
+	      message[2] = objects[6].owner === UUID ? objects[6] : null;
+	      message[3] = objects[7].owner === UUID ? objects[7] : null;
+	      message[4] = objects[8].owner === UUID ? objects[8] : null;
+
+              pushState(JSON.stringify(message));
               count = 0;
             }
             else {
