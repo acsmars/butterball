@@ -1,4 +1,34 @@
 #gameContainer
 {
-
+	border:2px solid #000000;
+	border-radius:2px;
+	width:60%;
+	min-width:800px;
+	height:500px;
+	margin:-20px 0 20px 20%;
+}
+.column
+{
+	float:left;
+	margin:10px 10% 10px 12%;
+}
+.column2
+{
+	float:left;
+	margin:0px 14% 0px 14%;
+}
+.separator
+{
+	border-left:medium #000000 solid; 
+	height:44px; 
+	float:left;
+}
+.gameSlot
+{
+	min-height:20px;
+	min-width:800px;
+}
+.gameSlot:hover
+{
+	background-color:rgb(245,211,157);
 }

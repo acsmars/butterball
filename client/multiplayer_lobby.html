@@ -6,10 +6,35 @@
 </head>
 <body>
 	<div id="centerMain">
-		<h1>Multiplayer</h1>
+		<h1 style="margin-top:0px">Multiplayer</h1>
 	</div>
-	<div id="">
-	<div style="width:100%; margin-left:24%">
+	<div id="gameContainer">
+		<div>
+			<h3 class="column">Lobby Name</h3><div class="separator"></div>
+			<h3 class="column">Description</h3><div class="separator"></div>
+			<h3 class="column">Players</h3>
+		</div>
+		<hr style="border-color:black; clear:both"/>
+	</div>
+	<!-- Fill the gameContainer box with clickable games -->
+		<script>
+			//fill variables here
+			var lobbyName = ["lobby1","lobby2"];
+			var description = ["test","test2"];
+			var numPeople = ["4","8"];
+			
+			//this variables keeps track of the number of games/game lobbies to choose from
+			var numGames = 2;
+			var div;
+			for(var i=0; i<numGames; i++)
+			{
+				div = document.createElement('div');
+				div.className = 'gameSlot';
+				div.innerHTML = '<h3 class="column2">'+lobbyName[i]+'</h3><h3 class="column2">'+description[i]+'</h3><h3 class="column2">'+numPeople[i]+'</h3>';
+				document.getElementById('gameContainer').appendChild(div);
+			}		
+		</script>
+	<div style="width:100%; margin-left:23%">
 		<a class="small button" href="index.html" style="float:left"><- Back</a>
 		<a class="medium button" href="" style="float:left; margin-left:80px; width:300px">Create New Game</a>
 		<a class="small button" href="" style="float:left; margin-left:80px">Join Game</a>
