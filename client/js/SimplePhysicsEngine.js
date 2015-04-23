@@ -221,7 +221,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
-            if (stateCache[index] !== null && objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
+            if (stateCache[index] !== null && stateCache[index] !== undefined && objects[index].type == "paddle" && UUID != index) {
                 //Update opposite paddle with cache values
                 console.log("Physics: ", objects[index], " Cache: ", stateCache[index]);
 		objects[index] = stateCache[index];
@@ -374,12 +374,20 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
                     if(isBallReset) {
                         //Reset Ball
+                        //Attempt to help syncronization by removing random spawns for now
+                        /*
                         newObjects[index].vx = getRandomVelocity();
                         newObjects[index].vy = getRandomVelocity();
                         if(newObjects[index].vx > 0) {newObjects[index].x = physWidth / 4;}
                         else {newObjects[index].x = physWidth * 3 / 4;}
                         if(newObjects[index].vy > 0) {newObjects[index].y = physHeight / 4;}
-                        else {newObjects[index].y = physHeight * 3 / 4;}
+                        else {newObjects[index].y = physHeight * 3 / 4;}*/
+                        newObjects[index].vx = 2;
+                        newObjects[index].vy = 2;
+                        newObjects[index].x = physWidth * 0.5;
+                        newObjects[index].y = physHeight * 0.5;
+                        //Explicitly set owener on respawn (stopgap fix for apparent lack of ownership and syncronization on spawn)
+                        newObjects[index].owner = 4;
 
                     };
                     break;
