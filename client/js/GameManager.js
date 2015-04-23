@@ -21,9 +21,9 @@ var GameManager = function()
         new wall("yellow", 0, 1000 - 30, 1000, 30,1), // bot
         new paddle('black', 40, 40, 15, 120),
         new paddle('black', 1000 - 50, 40, 15, 120),
-        new ball('blue', 100, 100, 10, 2, 2, 0, 0, 0.01),
-        new ball('green', 200, 100, 10, 2, 2, 0, 0.1),
-        new ball('red', 300, 100, 10, 2, 2, 0, -0.1)
+        new ball('blue', 100, 100, 10, 4, 4, 0, 0, 0.02),
+        new ball('green', 200, 100, 10, 4, 4, 0, 0.1),
+        new ball('red', 300, 100, 10, 4, 4, 0, -0.1)
     ];
 
     // controller1
