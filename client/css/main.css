@@ -88,6 +88,6 @@ p {
 }
 #controlsBackButton{
 	position:absolute;
-	margin-left: -14%;
-	margin-top: 25%;
+
+	margin: 20% 0 40px -14%;
 }
