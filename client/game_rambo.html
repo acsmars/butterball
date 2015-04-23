@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="js/GraphicsManager.js"></script>
+    <script type="text/javascript" src="js/SimplePhysicsEngine_Rambo.js"></script>
+    <script type="text/javascript" src="js/Controller_Rambo.js"></script>
+    <script type="text/javascript" src="js/Ball.js"></script>
+    <script type="text/javascript" src="js/Wall.js"></script>
+    <script type="text/javascript" src="js/Paddle.js"></script>
+    <script type="text/javascript" src="js/GameManager_Rambo.js"></script>
+    <script type="text/javascript" src="js/Team.js"></script>
+    <script type="text/javascript" src="js/NetworkManager.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/canvas.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/main.css"></link>
+</head>
+<body>
+    <div id="centerMain">
+        <div id="canvas_container"></div>
+	<ul id="pushLog"></ul>
+        <a class="small button" id="mainMenu" href="index.html">Main Menu</a>
+    </div>
+</body>
+<script>
+  var GM = new GameManager();
+  var socket = io();
+  var UUID = get("id");
+  var stateCache = []
+
+   socket.on('statePush', function(tickPkg){
+	    stateCache = tickPkg
+	    });
+	    
+  function get(name){
+    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+  }
+
+</script>
+</html>
