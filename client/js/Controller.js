@@ -47,16 +47,18 @@ var Controller = function (id, objs, upKey, downKey, leftKey, rightKey) {
     this.checkKey = function () {
         //Finds a paddle objecat and applies adjustments from input keys to its position
         //Later versions will have settings for which paddle is bound to which keys
+        var paddleSpeed = 10;
+
         paddle = objs[controllerID];
 
         if (keys[up] && keys[down]) paddle.vy = 0;
-        else if (keys[up]) paddle.vy = -6;
-        else if (keys[down]) paddle.vy = 6;
+        else if (keys[up]) paddle.vy = -paddleSpeed;
+        else if (keys[down]) paddle.vy = paddleSpeed;
         else paddle.vy = 0;
 
         if (keys[left] && keys[right]) paddle.vx = 0;
-        else if (keys[left]) paddle.vx = -6;
-        else if (keys[right]) paddle.vx = 6;
+        else if (keys[left]) paddle.vx = -paddleSpeed;
+        else if (keys[right]) paddle.vx = paddleSpeed;
         else paddle.vx = 0;
 
     };

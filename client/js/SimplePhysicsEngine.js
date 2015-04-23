@@ -74,7 +74,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
         var total = radiusPoints.length
         var collision = false;
-
+        if(testObject.destroyed == true) {
+            return false;
+        }
         for (i = 0; i < total; i += 4) {
             radiusPoints[i+2] = false;
 
@@ -236,7 +238,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
         var index2, len2;
 
         for (index = 0, len = objects.length; index < len; ++index) {
-
+            if(objects[index].destroyed == true) {continue;}
             if (debug > 0) {
                 this.dlog("Iterating object " + String(index), "SimplePhysicsEngine");
             }
