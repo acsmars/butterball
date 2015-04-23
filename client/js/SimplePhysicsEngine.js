@@ -215,7 +215,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             // Determine new positions
             // Done here so that new positions are copied to second array
             if (objects[index].type == "ball") {
-		if (stateCache[index] && stateCache[index].hasOwnProperty('owner') && stateCache[index].owner !== UUID) {
+		if (stateCache[index] && stateCache[index].hasOwnProperty('owner') && stateCache[index].owner != UUID) {
 			objects[index] = stateCache[index];
 		}
                 objects[index].x += objects[index].vx * time;
@@ -469,9 +469,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             //Prevents issues with flooding the server and causing a crash
             if (count >= messagePer) {
 	      message = [UUID, objects[UUID]];
-	      message[2] = objects[6].owner === UUID ? objects[6] : null;
-	      message[3] = objects[7].owner === UUID ? objects[7] : null;
-	      message[4] = objects[8].owner === UUID ? objects[8] : null;
+	      message[2] = objects[6].owner == UUID ? objects[6] : null;
+	      message[3] = objects[7].owner == UUID ? objects[7] : null;
+	      message[4] = objects[8].owner == UUID ? objects[8] : null;
 
               pushState(JSON.stringify(message));
               count = 0;
