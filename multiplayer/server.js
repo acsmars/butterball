@@ -23,7 +23,7 @@ app.configure(function() {
 	try {
 	    npid.create('/var/run/advanced-chat.pid', true);
 	} catch (err) {
-	    console.log(err);
+	    console.log(err + "Invalid user credentials");
 	    process.exit(1);
 	}
 
