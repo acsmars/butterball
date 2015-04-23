@@ -14,7 +14,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
     // before sending next message to server
     // Time between messages can be determined like so:
     // milliseconds = physicsInterval * messagePer
-    var messagePer = 8;
+    var messagePer = 20;
     var count = 0;
 
     //TODO: replace gameManager instance with message handler?
@@ -74,7 +74,9 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
         var total = radiusPoints.length
         var collision = false;
-
+        if(testObject.destroyed == true) {
+            return false;
+        }
         for (i = 0; i < total; i += 4) {
             radiusPoints[i+2] = false;
 
@@ -215,10 +217,13 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             // Determine new positions
             // Done here so that new positions are copied to second array
             if (objects[index].type == "ball") {
+		if (stateCache[index] && stateCache[index].hasOwnProperty('owner') && stateCache[index].owner !== UUID) {
+			objects[index] = stateCache[index];
+		}
                 objects[index].x += objects[index].vx * time;
                 objects[index].y += objects[index].vy * time;
             }
-            if (stateCache[index] !== null && objects[index].type == "paddle" && UUID != index && stateCache[index] !== undefined) {
+            if (stateCache[index] !== null && stateCache[index] !== undefined && objects[index].type == "paddle" && UUID != index) {
                 //Update opposite paddle with cache values
                 console.log("Physics: ", objects[index], " Cache: ", stateCache[index]);
 		objects[index] = stateCache[index];
@@ -233,7 +238,7 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
         var index2, len2;
 
         for (index = 0, len = objects.length; index < len; ++index) {
-
+            if(objects[index].destroyed == true) {continue;}
             if (debug > 0) {
                 this.dlog("Iterating object " + String(index), "SimplePhysicsEngine");
             }
@@ -356,6 +361,10 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
                                 isBallReset = true;
                             }
 
+			    //Update owner on collision with paddle
+			    if(newObjects[index2].type == "paddle" && index2 == UUID) {
+				newObjects[index].owner = UUID;
+			    }
                         }
 
                     }
@@ -367,12 +376,20 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
 
                     if(isBallReset) {
                         //Reset Ball
+                        //Attempt to help syncronization by removing random spawns for now
+                        /*
                         newObjects[index].vx = getRandomVelocity();
                         newObjects[index].vy = getRandomVelocity();
                         if(newObjects[index].vx > 0) {newObjects[index].x = physWidth / 4;}
                         else {newObjects[index].x = physWidth * 3 / 4;}
                         if(newObjects[index].vy > 0) {newObjects[index].y = physHeight / 4;}
-                        else {newObjects[index].y = physHeight * 3 / 4;}
+                        else {newObjects[index].y = physHeight * 3 / 4;}*/
+                        newObjects[index].vx = 2;
+                        newObjects[index].vy = 2;
+                        newObjects[index].x = physWidth * 0.5;
+                        newObjects[index].y = physHeight * 0.5;
+                        //Explicitly set owener on respawn (stopgap fix for apparent lack of ownership and syncronization on spawn)
+                        newObjects[index].owner = 4;
 
                     };
                     break;
@@ -453,7 +470,12 @@ var SimplePhysicsEngine = function (physWidth, physHeight, maxSpeed, debug) {
             //Count for messagePer cycles before sending messages
             //Prevents issues with flooding the server and causing a crash
             if (count >= messagePer) {
-              pushState(JSON.stringify([UUID, objects[UUID]]));
+	      message = [UUID, objects[UUID]];
+	      message[2] = objects[6].owner === UUID ? objects[6] : null;
+	      message[3] = objects[7].owner === UUID ? objects[7] : null;
+	      message[4] = objects[8].owner === UUID ? objects[8] : null;
+
+              pushState(JSON.stringify(message));
               count = 0;
             }
             else {
