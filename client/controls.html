@@ -5,53 +5,101 @@
 	<script>
 	function initializeControls()
 	{
-		var cookie = getControlsCookie('left');
+		var cookie = getControlsCookie('left1');
 		if(cookie=="")
 		{
-			createControlsCookie('left',37);
+			createControlsCookie('left1',37);
 		}
-		cookie = getControlsCookie('right');
+		cookie = getControlsCookie('right1');
 		if(cookie=="")
 		{
-			createControlsCookie('right',39);
+			createControlsCookie('right1',39);
 		}
-		cookie = getControlsCookie('up');
+		cookie = getControlsCookie('up1');
 		if(cookie=="")
 		{
-			createControlsCookie('up',38);
+			createControlsCookie('up1',38);
 		}
-		cookie = getControlsCookie('down');
+		cookie = getControlsCookie('down1');
 		if(cookie=="")
 		{
-			createControlsCookie('down',40);
+			createControlsCookie('down1',40);
+		}
+		
+		
+		var cookie = getControlsCookie('left2');
+		if(cookie=="")
+		{
+			createControlsCookie('left2',37);
+		}
+		cookie = getControlsCookie('right2');
+		if(cookie=="")
+		{
+			createControlsCookie('right2',39);
+		}
+		cookie = getControlsCookie('up2');
+		if(cookie=="")
+		{
+			createControlsCookie('up2',38);
+		}
+		cookie = getControlsCookie('down2');
+		if(cookie=="")
+		{
+			createControlsCookie('down2',40);
 		}
 	}
 	function loadCurrentControls()
 	{
-		var buttons = ['right','left','up','down'];
-		for(var i=0;i<buttons.length;i++)
+		var buttons1 = ['right1','left1','up1','down1'];
+		var buttons2 = ['right2','left2','up2','down2'];
+		for(var i=0;i<buttons1.length;i++)
 		{
-			var cookie = getControlsCookie(buttons[i]);
+			var cookie = getControlsCookie(buttons1[i]);
 			var keyText = (cookie.split("=")[1])
 			if (keyText == 37)
 			{
-				$('#'+buttons[i]).text("Left Arrow Key");
+				$('#'+buttons1[i]).text("Left Arrow Key");
 			}
 			else if (keyText == 38)
 			{
-				$('#'+buttons[i]).text("Up Arrow Key");
+				$('#'+buttons1[i]).text("Up Arrow Key");
 			}
 			else if (keyText == 39)
 			{
-				$('#'+buttons[i]).text("Right Arrow Key");
+				$('#'+buttons1[i]).text("Right Arrow Key");
 			}
 			else if (keyText == 40)
 			{
-				$('#'+buttons[i]).text("Down Arrow Key");
+				$('#'+buttons1[i]).text("Down Arrow Key");
 			}
 			else
 			{
-				$('#'+buttons[i]).text(String.fromCharCode(keyText));
+				$('#'+buttons1[i]).text(String.fromCharCode(keyText));
+			}
+		}
+		for(var i=0;i<buttons1.length;i++)
+		{
+			var cookie = getControlsCookie(buttons2[i]);
+			var keyText = (cookie.split("=")[1])
+			if (keyText == 37)
+			{
+				$('#'+buttons2[i]).text("Left Arrow Key");
+			}
+			else if (keyText == 38)
+			{
+				$('#'+buttons2[i]).text("Up Arrow Key");
+			}
+			else if (keyText == 39)
+			{
+				$('#'+buttons2[i]).text("Right Arrow Key");
+			}
+			else if (keyText == 40)
+			{
+				$('#'+buttons2[i]).text("Down Arrow Key");
+			}
+			else
+			{
+				$('#'+buttons2[i]).text(String.fromCharCode(keyText));
 			}
 		}
 	}
@@ -98,18 +146,26 @@
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/main.css"></link>
 </head>
-<body>
+<body style="overflow-y:visible">
 	<script>
 		initializeControls();
 	</script>
 	<div id="centerMain">
 		<h1>Controls</h1>
 		<div ID="controlCenterDiv">
+			<h2 style="color: red">Player 1</h2>
 			<div style="height:40px; width: 100%"><h3 style="margin-left:80%">Click to Change</h3><div>
-			<div class="controlDiv"><h2>Move paddle left</h2><a ID="left" class="tiny button" onclick="setControls('left')"></a></div>
-			<div class="controlDiv"><h2>Move paddle right</h2><a ID="right" class="tiny button" onclick="setControls('right')"></a></div>
-			<div class="controlDiv"><h2>Move paddle up</h2><a ID="up" class="tiny button" onclick="setControls('up')"></a></div>
-			<div class="controlDiv"><h2>Move paddle down</h2><a ID="down" class="tiny button" onclick="setControls('down')"></a></div>
+			<div class="controlDiv"><h2>Move paddle left</h2><a ID="left1" class="tiny button" onclick="setControls('left1')"></a></div>
+			<div class="controlDiv"><h2>Move paddle right</h2><a ID="right1" class="tiny button" onclick="setControls('right1')"></a></div>
+			<div class="controlDiv"><h2>Move paddle up</h2><a ID="up1" class="tiny button" onclick="setControls('up1')"></a></div>
+			<div class="controlDiv"><h2>Move paddle down</h2><a ID="down1" class="tiny button" onclick="setControls('down1')"></a></div>
+			<br>
+			<h2 style="color: blue">Player 2</h2>
+			<div style="height:40px; width: 100%"><h3 style="margin-left:80%">Click to Change</h3><div>
+			<div class="controlDiv"><h2>Move paddle left</h2><a ID="left2" class="tiny button" onclick="setControls('left2')"></a></div>
+			<div class="controlDiv"><h2>Move paddle right</h2><a ID="right2" class="tiny button" onclick="setControls('right2')"></a></div>
+			<div class="controlDiv"><h2>Move paddle up</h2><a ID="up2" class="tiny button" onclick="setControls('up2')"></a></div>
+			<div class="controlDiv"><h2>Move paddle down</h2><a ID="down2" class="tiny button" onclick="setControls('down2')"></a></div>
 		</div>
 	</div>
 	<div ID="controlsBackButton">
